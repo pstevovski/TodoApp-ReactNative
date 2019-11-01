@@ -78,18 +78,33 @@ const TodoPage = () => {
     const updatedArray = [...itemArray];
     updatedArray.splice(itemId, 1, newItemValue);
 
-    // Update the current array
-    setItemArray(updatedArray);
-
-    // Save the updated array to storage
-    await setItem(JSON.stringify(updatedArray))
-
     // Update list
-    readItemFromStorage();
+    updateTodoList(updatedArray);
 
     // Clear input and reset state
     setEditState(false);
     setTodoText("");
+  }
+
+  // Delete specific item
+  const deleteItem = async (id: number) => {
+    const arrayAfterDelete = [...itemArray];
+    arrayAfterDelete.splice(id, 1);
+
+    // Update list
+    updateTodoList(arrayAfterDelete);
+  }
+
+  // Update current array, save to storage, reload list
+  const updateTodoList = async (newArray: Array<string>) => {
+    // Update current array
+    setItemArray(newArray);
+
+    // Save to storage
+    await setItem(JSON.stringify(newArray));
+
+    // Update list
+    readItemFromStorage();
   }
 
 
@@ -107,7 +122,12 @@ const TodoPage = () => {
 
       {itemArray && itemArray.length > 0 ?
         itemArray.map((item, index) => (
-          <Text key={index} onPress={() => selectItem(index)}>{item}</Text>
+          <View key={index}>
+            <Text 
+              onPress={() => selectItem(index)}
+            >{item}</Text>
+            <Text onPress={() => deleteItem(index)}> DEL </Text>
+          </View>
         ))
       : null}
       
