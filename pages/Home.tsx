@@ -13,7 +13,7 @@ const Home = (props: any) => {
   return (
     <View>
       <Icon
-        onPress={() => props.navigation.navigate("CreateTodo")}
+        onPress={() => props.navigation.navigate("CreateTodo", { title: "Create Todo"})}
         name="add-circle" 
         size={80} 
         color="#e1302a" style={{
