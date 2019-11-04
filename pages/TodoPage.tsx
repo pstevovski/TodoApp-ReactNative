@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Alert } from "react-native";
+import { View, Text, TextInput } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // Storage
 import AsyncStorage from "@react-native-community/async-storage";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 
 // Import styling 
-import { text } from "../styles/styles";
+// import { text, containers } from "../styles/styles";
+import { ScrollView } from "react-native-gesture-handler";
 
-const TodoPage = () => {
+const TodoPage = (props: any) => {
   const [todoText, setTodoText] = useState("")
   const { getItem, setItem } = useAsyncStorage("@todoList");
   const [itemArray, setItemArray] = useState([]);
   const [editState, setEditState] = useState(false);
   const [oldTodoText, setOldTodoText] = useState("");
+  const [inputFocused, setInputFocused] = useState(false);
 
   // Read items from storage on page load
   useEffect(() => {
@@ -34,6 +37,8 @@ const TodoPage = () => {
 
   // Add items to the array and save to storage
   const handleAddItem = async () => {
+    if (!todoText) return;
+
     const newArray = [...itemArray];
     newArray.push(todoText);
 
@@ -107,39 +112,50 @@ const TodoPage = () => {
     readItemFromStorage();
   }
 
-
   return (
     <View>
-      <TextInput
-        placeholder="Todo item..."
-        onChangeText={todoText => setTodoText(todoText)}
-        value={todoText}
-        style={{
-          borderBottomColor: "#e1302a",
-          borderBottomWidth: 2,
-        }}
-      />
-
-      {itemArray && itemArray.length > 0 ?
-        itemArray.map((item, index) => (
-          <View key={index}>
-            <Text 
-              onPress={() => selectItem(index)}
-            >{item}</Text>
-            <Text onPress={() => deleteItem(index)}> DEL </Text>
-          </View>
-        ))
-      : null}
-      
-        {editState ? 
-          <Text onPress={updateItem} style={text.a}>Edit Item</Text> 
-        :
-          <Text onPress={handleAddItem} style={text.a}>ADD TODO</Text>
-        }
-
-      <Text onPress={clearStorage} style={text.p}>CLEAR STORAGE</Text>
+      <Text>Todo page test</Text>
+      <Text>Item id: {JSON.stringify(props.navigation.getParam("itemID"))}</Text>
     </View>
   )
+  // return (
+  //   <View>
+  //     <View style={{flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
+  //       <TextInput
+  //         placeholder="Todo item..."
+  //         onChangeText={todoText => setTodoText(todoText)}
+  //         onFocus={() => setInputFocused(!inputFocused)}
+  //         value={todoText}
+  //         style={{
+  //           borderBottomColor: inputFocused ? "#e1302a" : "#eee",
+  //           borderBottomWidth: 2,
+  //           flex: 1
+  //         }}
+  //       />
+        
+  //       {editState ? 
+  //         <Icon onPress={updateItem} name="edit" size={30} color="#e1302a" />
+  //       :
+  //         <Icon onPress={handleAddItem} name="add-circle" size={30} color="#e1302a" style={{paddingHorizontal: 5}} />
+  //       }
+
+  //     </View>
+      
+  //     <ScrollView>
+  //       {itemArray && itemArray.length > 0 ?
+  //         itemArray.map((item, index) => (
+  //           <View key={index} onTouchStart={() => selectItem(index)} style={containers.todoItem}>
+  //             <Text>{item}</Text>
+  //             {/* <Text onPress={() => deleteItem(index)}> DEL </Text> */}
+  //             <Icon onPress={() => deleteItem(index)} name="delete-forever" size={30} color="#e1302a" />
+  //           </View>
+  //         ))
+  //       : null}
+  //     </ScrollView>
+      
+  //     {itemArray.length > 0 ? <Text onPress={clearStorage} style={text.p}>CLEAR STORAGE</Text> : null }
+  //   </View>
+  // )
 }
 
 TodoPage.navigationOptions = () => ({

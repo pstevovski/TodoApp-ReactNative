@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from "react-native";
 
 // React navigation
 import {createAppContainer} from "react-navigation";
@@ -8,26 +9,27 @@ import {createStackNavigator} from "react-navigation-stack";
 import Home from "./pages/Home";
 import TodoPage from "./pages/TodoPage";
 import AboutPage from "./pages/AboutPage";
+import CreateTodoPage from "./pages/CreateTodoPage"
 
 // Create navigation routes
 const MainNavigator = createStackNavigator(
   {
     Home: Home,
-    Todo: TodoPage,
-    About: AboutPage
+    Todos: TodoPage,
+    About: AboutPage,
+    CreateTodo: CreateTodoPage
   },
   {
     initialRouteName: "Home",
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: "#f5f5f5",
-        elevation: 0
+        backgroundColor: "#fff",
+        elevation: 2
       },
       headerTintColor: "#e1302a",
       headerTitleStyle: {
-        fontSize: 24,
+        fontSize: 26,
         color: "#e1302a",
-        fontWeight: "bold"
       }
     }
   }
@@ -38,7 +40,10 @@ const AppContainer = createAppContainer(MainNavigator);
 
 const App = () => {
   return (
-    <AppContainer />
+    <>
+      <StatusBar backgroundColor="#e1302a" barStyle="light-content" />
+      <AppContainer />
+    </>
   )
 }
 

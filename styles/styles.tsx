@@ -2,52 +2,72 @@ import { StyleSheet } from "react-native";
 
 // Text styling
 export const text = StyleSheet.create({
-  p: {
-    fontSize: 24,
+  global: {
+    color: "#333",
+    marginVertical:   0,
+    marginHorizontal: 0
   },
-  a: {
-    fontSize: 18,
-    textDecorationLine: "underline",
-    color: "blue"
-  }
+  p: {
+    fontSize: 16,
+  },
+  pBig: {
+    fontSize: 20
+  },
+  pButtonMd: { fontSize: 18 },
+  title: {
+    fontWeight: "bold",
+    textAlign: "center",
+    padding: 20
+  },
+  pageTitle: {
+    fontSize: 32,
+  },
+  sectionTitle: {
+    fontSize: 28,
+  },
 })
 
-// Views styling
+// Containers
 export const containers = StyleSheet.create({
   div: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-    height: "100%",
-    backgroundColor: "#f5f5f5"
+    alignItems: "center",
+    backgroundColor: "#eee", // Default color
   },
+  homePageContainer: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: 120
+  }
 })
 
 // Buttons
 export const buttons = StyleSheet.create({
   global: {
-    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    shadowColor: "#333",
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 8,
+    // height: 50,
+    padding: 10,
     alignItems: "center",
-    textAlign: "center",
-    color: "#fff",
-    borderRadius: 25,
+    justifyContent: "center",
   },
   sm: {
-    width: 100,
-    height: 40,
-    marginTop: 20,
-    color: "#fff",
-    textAlign: "center",
-  }
-})
-
-// Colors
-export const colors = StyleSheet.create({
-  red: {
-    backgroundColor: "#e1302a",
-    color: "#fff"
+    width:  50,
+    fontSize: 16
   },
-  white: {
-    color: "#fff"
+  md: {
+    width: 120,
+    fontSize: 20
+  },
+  lg: {
+    width: 180,
+    fontSize: 24
   }
 })
