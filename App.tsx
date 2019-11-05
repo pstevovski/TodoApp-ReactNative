@@ -9,7 +9,7 @@ import {createStackNavigator} from "react-navigation-stack";
 import Home from "./pages/Home";
 import TodoPage from "./pages/TodoPage";
 import AboutPage from "./pages/AboutPage";
-import CreateTodoPage from "./pages/CreateTodoPage"
+import CreateTodo from "./pages/CreateTodo"
 
 // Create navigation routes
 const MainNavigator = createStackNavigator(
@@ -17,7 +17,7 @@ const MainNavigator = createStackNavigator(
     Home: Home,
     Todos: TodoPage,
     About: AboutPage,
-    CreateTodo: CreateTodoPage
+    CreateTodo: CreateTodo
   },
   {
     initialRouteName: "Home",
