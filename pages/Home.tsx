@@ -7,15 +7,21 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 // Import styling
 import { text, containers, buttons } from "../styles/styles";
 
-const Home = (props: any) => {
-  const [addRotate, setAddRotate] = useState(0)
+// Import components
+import MainList from "../components/MainList";
 
+const Home = (props: any) => {
   return (
     <View>
+      <MainList />
+
       <Icon
-        onPress={() => props.navigation.navigate("CreateTodo", { title: "Create Todo"})}
+        onPress={() => props.navigation.navigate("CreateTodo", { 
+          type: "list",
+          title: "Create New List"
+        })}
         name="add-circle" 
-        size={80} 
+        size={70} 
         color="#e1302a" style={{
           position: "absolute",
           right: 20,
