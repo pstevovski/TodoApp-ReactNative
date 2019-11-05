@@ -5,12 +5,6 @@ import AsyncStorage, { useAsyncStorage } from "@react-native-community/async-sto
 // Unique IDs generator
 import uuid from "uuid";
 
-// interface CreateTodoProps {
-//   type: string,
-//   title: string,
-//   navigation: any
-// }
-
 const CreateTodo = (props: any) => {
   const [editState, setEditState] = useState(false);
   const { getItem, setItem } = useAsyncStorage("@todoList");
@@ -45,7 +39,7 @@ const CreateTodo = (props: any) => {
     const currentDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`:date.getMinutes()}` // Format: mm/dd/yyyy, hh:mm:ss
 
     // Update the array of lists / todo items
-    const newListArray = [...listArray];
+    const newListArray: Object[] = [...listArray];
     newListArray.push({
       title,
       description,
@@ -109,7 +103,7 @@ const CreateTodo = (props: any) => {
   )
 }
 
-CreateTodo.navigationOptions = ({ navigation }) => ({
+CreateTodo.navigationOptions = ({ navigation }: any) => ({
   title: navigation.getParam("title")
 })
 
