@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView, FlatList } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 
-const MainList = () => {
+// List component
+import TodoList from "../components/TodoList";
+
+const MainList = (props: any) => {
   const { getItem, setItem } = useAsyncStorage("@todoList");
   const [todoListsArray, setTodoListsArray] = useState([]);
 
-  // Read saved items from local storage
+  // Read saved items from local storage on any(??) update to the state
   useEffect(() => {
     readListFromStorage();
-  }, [])
+  })
 
   const readListFromStorage = async () => {
     const list = await getItem();
@@ -22,11 +25,22 @@ const MainList = () => {
     }
   }
 
-  // Create a todo list which holds todo items
-
-
   return (
-    <Text>Main List</Text>
+    <SafeAreaView>
+      <Text>Main List</Text>
+      {todoListsArray && todoListsArray.length > 0 ?
+        todoListsArray.map((item: any) => (
+          <TodoList
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            description={item.description}
+            date={item.date}
+            completed={item.completed}
+          />
+        )) 
+      : null}
+    </SafeAreaView>
   )
 }
 
