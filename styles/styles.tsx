@@ -71,3 +71,20 @@ export const buttons = StyleSheet.create({
     fontSize: 24
   }
 })
+
+// Todo items
+export const todo = StyleSheet.create({
+  global: {
+    marginVertical: 5,
+    marginHorizontal: 15
+  },
+  // Todo List
+  list: {
+    maxWidth: 500,
+    width:  "80%",
+    padding: 5,
+    elevation: 3,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+  }
+})
