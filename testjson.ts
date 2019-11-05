@@ -2,6 +2,7 @@ todosList: [
   {
     title: "",
     id: "",
+    description: "",
     dateCreated: "",
     children: [
       {
@@ -10,7 +11,8 @@ todosList: [
         todoText: "",
         dateAdded: "",
         ?todoImage: "",
-        ?todoUser: ""
+        ?todoUser: "",
+        completed: boolean
       }
     ]
   }

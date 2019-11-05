@@ -1,9 +1,15 @@
 # TodoApp React Native
 Simple Todo App made in React Native.
 
-- [ ] Save separate todo lists
-- [ ] Save item
-- [ ] Read saved items
+- [x] Save separate todo lists
+- [x] Read saved items
+- [x] Edit/update specific list
+- [x] Remove specific list
+
+-----------------------------------------
+
+- [ ] Custom checkbox
+- [ ] Save item to specific list
 - [ ] Clear storage
 - [ ] Edit specific item
 - [ ] Remove specific item

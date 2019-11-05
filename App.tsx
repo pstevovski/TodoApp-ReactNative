@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import TodoPage from "./pages/TodoPage";
 import AboutPage from "./pages/AboutPage";
 import CreateTodo from "./pages/CreateTodo"
+import TodoListPage from "./pages/TodoListPage";
 
 // Create navigation routes
 const MainNavigator = createStackNavigator(
@@ -17,7 +18,8 @@ const MainNavigator = createStackNavigator(
     Home: Home,
     Todos: TodoPage,
     About: AboutPage,
-    CreateTodo: CreateTodo
+    CreateTodo: CreateTodo,
+    SpecificTodoList: TodoListPage
   },
   {
     initialRouteName: "Home",

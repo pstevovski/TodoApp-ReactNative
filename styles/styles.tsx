@@ -76,13 +76,16 @@ export const buttons = StyleSheet.create({
 export const todo = StyleSheet.create({
   global: {
     marginVertical: 5,
-    marginHorizontal: 15
+    marginHorizontal: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   // Todo List
   list: {
     maxWidth: 500,
-    width:  "80%",
-    padding: 5,
+    width:  "90%",
+    padding:   5,
     elevation: 3,
     borderRadius: 5,
     backgroundColor: "#fff",

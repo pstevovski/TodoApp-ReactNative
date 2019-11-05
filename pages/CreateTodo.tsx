@@ -61,6 +61,20 @@ const CreateTodo = (props: any) => {
     saveToStorage(newListArray);
   }
 
+  // Add and save todo items in a specific todo list
+  const addTodoToList = () => {
+    if (!title || !description) return;
+
+    // Add item to the list
+    const listItems: Object[] = [...listArray];
+    
+    /* 
+      TODO:
+      - Find the object in the array based on index
+      - Push a new item to the children array thats of type object.
+    */
+  }
+
   const editState = () => {
     setTitle(props.navigation.getParam("listTitleInput"));
     setDescription(props.navigation.getParam("desc"));
@@ -134,12 +148,14 @@ const CreateTodo = (props: any) => {
       <TouchableOpacity onPress={() => {
         if (props.navigation.getParam("state") === "edit") {
           editItem();
+        } else if (props.navigation.getParam("type") === "item") {
+          addTodoToList();
         } else {
           saveList();
         }
       }}>
         <View>
-          <Text>{props.navigation.getParam("state") === "edit" ? 'Edit' : 'Add'}</Text>
+          <Text>{props.navigation.getParam("state") === "edit" ? 'Edit List' : 'Create List'}</Text>
         </View>
       </TouchableOpacity>
 

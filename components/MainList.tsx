@@ -6,7 +6,7 @@ import { useAsyncStorage } from "@react-native-community/async-storage";
 import TodoList from "../components/TodoList";
 
 const MainList = (props: any) => {
-  const { getItem, setItem } = useAsyncStorage("@todoList");
+  const { getItem } = useAsyncStorage("@todoList");
   const [todoListsArray, setTodoListsArray] = useState([]);
 
   // Read saved items from local storage on any(??) update to the state
