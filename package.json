@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",
+    "@types/uuid": "^3.4.6",
     "react": "16.8.1",
     "react-native": "0.61.3",
     "react-native-elements": "^1.2.7",
@@ -18,7 +19,8 @@
     "react-native-screens": "^2.0.0-alpha.7",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^1.10.3"
+    "react-navigation-stack": "^1.10.3",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
