@@ -1,20 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import AsyncStorage, { useAsyncStorage } from "@react-native-community/async-storage";
 
-interface CreateTodoProps {
-  type: string,
-  title: string,
-}
+// Unique IDs generator
+import uuid from "uuid";
 
-const CreateTodo = (props: CreateTodoProps) => {
+// interface CreateTodoProps {
+//   type: string,
+//   title: string,
+//   navigation: any
+// }
+
+const CreateTodo = (props: any) => {
   const [editState, setEditState] = useState(false);
+  const { getItem, setItem } = useAsyncStorage("@todoList");
+  const [listArray, setListArray] = useState([]);
 
   // List properties
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  useEffect(() => {
+    readFromStorage();
+  }, [])
+  const readFromStorage = async () => {
+    const list = await getItem();
+
+    if (list !== null) {
+      setListArray(JSON.parse(list));
+      console.log(list);
+    } else {
+      setListArray([]);
+    }
+  }
+
+
   // Save item to storage
+  const saveList = async () => {
+    // Fields must be filled
+    if (!title || !description) return;
+
+    // Current date and time
+    const date = new Date();
+    const currentDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}, ${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`:date.getMinutes()}` // Format: mm/dd/yyyy, hh:mm:ss
+
+    // Update the array of lists / todo items
+    const newListArray = [...listArray];
+    newListArray.push({
+      title,
+      description,
+      id: uuid.v4().slice(0, 8),
+      dateCreated: currentDate,
+      children: []
+    })
+
+    // Save to storage
+    await setItem(JSON.stringify(newListArray));
+
+    // Clear input fields
+    setTitle("");
+    setDescription("");
+
+    props.navigation.navigate("Home")
+  }
+
 
   return (
     <View>
@@ -54,6 +103,8 @@ const CreateTodo = (props: CreateTodoProps) => {
           <Text>{editState ? 'Edit' : 'Add'}</Text>
         </View>
       </TouchableOpacity>
+
+      <Text onPress={async() => await AsyncStorage.clear()}>CLEAR</Text>
     </View>
   )
 }
