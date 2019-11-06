@@ -154,20 +154,22 @@ const CreateTodo = (props: any) => {
       </View>
       
       {/* List / Item description */}
-      <View>
-        <Text>Description: </Text>
-        <TextInput
-          placeholder="Description"
-          onChangeText={(description: string) => setDescription(description)}
-          value={description}
-          multiline={true}
-          numberOfLines={8}
-          style={{
-            padding: 10,
-            textAlignVertical: "top"
-          }}
-        />
-      </View>
+      {props.navigation.getParam("type") === "list" ? 
+        <View>
+          <Text>Description: </Text>
+          <TextInput
+            placeholder="Description"
+            onChangeText={(description: string) => setDescription(description)}
+            value={description}
+            multiline={true}
+            numberOfLines={8}
+            style={{
+              padding: 10,
+              textAlignVertical: "top"
+            }}
+          />
+        </View>
+      : null }
 
       {/* Save / Edit button */}
       <TouchableOpacity onPress={() => {
