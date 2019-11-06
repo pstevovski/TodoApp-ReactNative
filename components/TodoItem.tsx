@@ -15,7 +15,10 @@ const TodoItem = (props: TodoItemProps) => {
     <TouchableOpacity onLongPress={() => props.onPress(props.todoID)}>
       <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
         <View>
-          <Text>{props.todo}</Text>
+          <Text style={{
+            textDecorationLine: props.completed ? "line-through" : 'none',
+            textDecorationStyle: "solid"
+          }}>{props.todo}</Text>
           <Text>{props.date}</Text>
         </View>
 

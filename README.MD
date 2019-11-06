@@ -8,11 +8,11 @@ Simple Todo App made in React Native.
 - [x] Save item to specific list
 - [x] Clear storage
 - [x] Display todos from a specific list
+- [x] Long press on item to mark as completed
+- [x] If all items in a list are completed, mark list as completed
 -----------------------------------------
 - [ ] Custom checkbox
 - [ ] Edit specific item
 - [ ] Remove specific item
-- [ ] Long press on item to mark as completed
-- [ ] If all items in a list are completed, mark list as completed
 - [ ] Styling
 - [ ] Animations

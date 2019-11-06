@@ -36,7 +36,7 @@ const MainList = (props: any) => {
             title={item.title}
             description={item.description}
             date={item.date}
-            completed={item.completed}
+            completed={item.listCompleted}
           />
         )) 
       : null}

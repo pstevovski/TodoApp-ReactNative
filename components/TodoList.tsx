@@ -66,8 +66,14 @@ const TodoList = (props: TodoListProps) => {
     >
       <View style={[todo.global, todo.list]}>
           <View>
-            <Text>{props.title}</Text>
-            <Text>{props.description}</Text>
+            <Text style={{
+              textDecorationLine: props.completed ? "line-through" : "none",
+              textDecorationStyle: "solid",
+            }}>{props.title}</Text>
+            <Text style={{
+              textDecorationLine: props.completed ? "line-through" : "none",
+              textDecorationStyle: "solid",
+            }}>{props.description}</Text>
             <Text>{props.date}</Text>
           </View>
 

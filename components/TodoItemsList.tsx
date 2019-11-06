@@ -49,6 +49,14 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       const listToBeSaved = JSON.parse(lists);
       listToBeSaved.splice(filteredListIndex, 1, filteredList);
 
+      // Mark list as completed if every todo inside is completed
+      const checkIfEveryTodoIsCompleted = filteredList.children.every((item: any) => item.completed)
+      if (checkIfEveryTodoIsCompleted) {
+        listToBeSaved[filteredListIndex].listCompleted = true;
+      } else {
+        listToBeSaved[filteredListIndex].listCompleted = false;
+      }
+
       // Save to storage
       await setItem(JSON.stringify(listToBeSaved));
     }
