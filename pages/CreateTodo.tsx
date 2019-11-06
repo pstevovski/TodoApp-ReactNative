@@ -22,13 +22,14 @@ const CreateTodo = (props: any) => {
       editState();
     }
 
+
   }, [])
   const readFromStorage = async () => {
     const list = await getItem();
 
     if (list !== null) {
       setListArray(JSON.parse(list));
-      console.log(list);
+      // console.log(list);
     } else {
       setListArray([]);
     }
@@ -55,7 +56,7 @@ const CreateTodo = (props: any) => {
       description,
       date: `Created: ${currentDateAndTime()}`,
       children: [],
-      completed: false    
+      listCompleted: false    
     })
 
     saveToStorage(newListArray);
@@ -63,16 +64,30 @@ const CreateTodo = (props: any) => {
 
   // Add and save todo items in a specific todo list
   const addTodoToList = () => {
-    if (!title || !description) return;
+    // Must have title - what the todo is
+    if (!title) return;
 
     // Add item to the list
-    const listItems: Object[] = [...listArray];
-    
-    /* 
-      TODO:
-      - Find the object in the array based on index
-      - Push a new item to the children array thats of type object.
-    */
+    const listItems: any[] = [...listArray];
+    const listID = props.navigation.getParam("id");
+    let list = listItems.find((list: any) => list.id === listID);
+    const listIndex = listItems.findIndex((list: any) => list.id === listID);
+
+    // If list exists, push todo items to list childrens array
+    if (list) {
+      list.children.push({
+        todo: title,
+        todoID: uuid.v4().slice(0, 8),
+        date: `Added: ${currentDateAndTime()}`,
+        completed: false
+      })
+    }
+
+    // Update the list with new children
+    listItems.splice(listIndex, 1, list);
+
+    // Go back to the todo list
+    props.navigation.pop(); 
   }
 
   const editState = () => {
@@ -110,6 +125,14 @@ const CreateTodo = (props: any) => {
     setDescription("");
 
     props.navigation.navigate("Home")
+  }
+
+  // Clear storage from lists
+  const clearStorage = async () => {
+    await AsyncStorage.clear();
+
+    // Go back to home page
+    props.navigation.navigate("Home");
   }
 
   return (
@@ -159,7 +182,7 @@ const CreateTodo = (props: any) => {
         </View>
       </TouchableOpacity>
 
-      <Text onPress={async() => await AsyncStorage.clear()}>CLEAR</Text>
+      <Text onPress={clearStorage}>CLEAR</Text>
     </View>
   )
 }
