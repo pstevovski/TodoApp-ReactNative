@@ -4,28 +4,32 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 interface TodoItemProps {
   todo: string,
+  todoID: string,
   completed: boolean,
-  date?: Date | string
+  date?: Date | string,
+  onPress: (todoID: string) => void
 }
 
 const TodoItem = (props: TodoItemProps) => {
   return (
-    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-      <View>
-        <Text>{props.todo}</Text>
-        <Text>{props.date}</Text>
+    <TouchableOpacity onLongPress={() => props.onPress(props.todoID)}>
+      <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+        <View>
+          <Text>{props.todo}</Text>
+          <Text>{props.date}</Text>
+        </View>
+
+        <Icon 
+          name={props.completed ? 'check-circle' : 'cancel'}
+          size={30}
+          color={props.completed ? "green" : "#e1302a"}
+          style={{
+            opacity: props.completed ? 1 : 0.6
+          }}
+        />
+
       </View>
-
-      <Icon 
-        name={props.completed ? 'check-circle' : 'cancel'}
-        size={30}
-        color={props.completed ? "green" : "#e1302a"}
-        style={{
-          opacity: props.completed ? 1 : 0.6
-        }}
-      />
-
-    </View>
+    </TouchableOpacity>
   )
 }
 

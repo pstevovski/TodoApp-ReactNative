@@ -11,7 +11,7 @@ interface TodoItemsListProps {
 }
 
 const TodoItemsList = (props: TodoItemsListProps) => {
-  const { getItem } = useAsyncStorage("@todoList");
+  const { getItem, setItem } = useAsyncStorage("@todoList");
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -25,7 +25,35 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       setItems(JSON.parse(list).find((list: any) => list.id === props.id).children);
     }
 
-  } 
+  }
+
+  // Mark a todo as completed on long press
+  const markAsComplete = async (id: string) => {
+    // Get saved list and find pressed todo
+    const lists = await getItem();
+    const markedItemIndex = items.findIndex((item: any) => item.todoID === id);
+    // const markedItem: any = items.find((item: any) => item.todoID === id);
+
+    if (lists !== null) {
+      // Find the list and its index that contains the marked todo
+      const filteredList = JSON.parse(lists).find((list: any) => list.id === props.id);
+      const filteredListIndex = JSON.parse(lists).findIndex((list: any) => list.id === props.id);
+      
+      // Mark the todo item as completed
+      filteredList.children[markedItemIndex] = {
+        ...filteredList.children[markedItemIndex],
+        completed: true
+      }
+
+      // Update the lists
+      const listToBeSaved = JSON.parse(lists);
+      listToBeSaved.splice(filteredListIndex, 1, filteredList);
+
+      // Save to storage
+      await setItem(JSON.stringify(listToBeSaved));
+    }
+
+  }
 
   return (
     <View>
@@ -34,9 +62,12 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       {items ? 
         items.map((item: any) => (
           <TodoItem
+            key={item.todoID}
             todo={item.todo}
+            todoID={item.todoID}
             date={item.date}
             completed={item.completed}
+            onPress={markAsComplete}
           />
         ))
       : null}
