@@ -17,6 +17,22 @@ interface TodoListProps {
 const TodoList = (props: TodoListProps) => {
   const { getItem, setItem } = useAsyncStorage("@todoList");
 
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const getData = async() => {
+    const list = await getItem();
+
+    if (list !== null) {
+      setItems(JSON.parse(list).find((list: any) => list.id === props.id));
+    } else {
+      setItems([])
+    }
+  }
+
   // Delete list on long press
   const deleteList = async (id: string) => {
     // Get saved list array
@@ -37,7 +53,8 @@ const TodoList = (props: TodoListProps) => {
       // onPress={() => console.log(props.id, props.completed)}
       onPress={() => props.navigation.navigate("SpecificTodoList", {
         id: props.id,
-        title: props.title
+        title: props.title,
+        data: items
       })}
       onLongPress={() => props.navigation.navigate("CreateTodo", {
         state: "edit",

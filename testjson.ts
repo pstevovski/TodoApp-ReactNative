@@ -6,10 +6,9 @@ todosList: [
     dateCreated: "",
     children: [
       {
-        todoTitle: "",
+        todo: "",
         todoId: "",
-        todoText: "",
-        dateAdded: "",
+        date: "",
         ?todoImage: "",
         ?todoUser: "",
         completed: boolean

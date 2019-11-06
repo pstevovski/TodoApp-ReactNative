@@ -10,7 +10,7 @@ interface TodoItemProps {
 
 const TodoItem = (props: TodoItemProps) => {
   return (
-    <View>
+    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
       <View>
         <Text>{props.todo}</Text>
         <Text>{props.date}</Text>

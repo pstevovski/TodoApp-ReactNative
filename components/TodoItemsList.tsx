@@ -3,6 +3,7 @@ import { View, Text, Dimensions } from "react-native";
 import TodoItem from "./TodoItem";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { withNavigation } from "react-navigation";
+import { useAsyncStorage } from "@react-native-community/async-storage";
 
 interface TodoItemsListProps {
   id: string,
@@ -10,11 +11,35 @@ interface TodoItemsListProps {
 }
 
 const TodoItemsList = (props: TodoItemsListProps) => {
+  const { getItem } = useAsyncStorage("@todoList");
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    getListData();
+  });
+
+  const getListData = async() => {
+    const list = await getItem();
+
+    if (list !== null) {
+      setItems(JSON.parse(list).find((list: any) => list.id === props.id).children);
+    }
+
+  } 
+
   return (
     <View>
       <Text>ID: {props.id} </Text>
-      {/* <TodoItem />
-      <TodoItem completed={true} /> */}
+
+      {items ? 
+        items.map((item: any) => (
+          <TodoItem
+            todo={item.todo}
+            date={item.date}
+            completed={item.completed}
+          />
+        ))
+      : null}
 
 
       <Icon

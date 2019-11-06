@@ -29,7 +29,6 @@ const CreateTodo = (props: any) => {
 
     if (list !== null) {
       setListArray(JSON.parse(list));
-      // console.log(list);
     } else {
       setListArray([]);
     }
@@ -63,7 +62,7 @@ const CreateTodo = (props: any) => {
   }
 
   // Add and save todo items in a specific todo list
-  const addTodoToList = () => {
+  const addTodoToList = async() => {
     // Must have title - what the todo is
     if (!title) return;
 
@@ -85,6 +84,9 @@ const CreateTodo = (props: any) => {
 
     // Update the list with new children
     listItems.splice(listIndex, 1, list);
+
+    // Save to storage
+    await setItem(JSON.stringify(listItems));
 
     // Go back to the todo list
     props.navigation.pop(); 
