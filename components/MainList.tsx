@@ -4,6 +4,7 @@ import { useAsyncStorage } from "@react-native-community/async-storage";
 
 // List component
 import TodoList from "../components/TodoList";
+import SearchBar from "./SearchBar";
 
 const MainList = (props: any) => {
   const { getItem } = useAsyncStorage("@todoList");
@@ -25,8 +26,16 @@ const MainList = (props: any) => {
     }
   }
 
+  // Filter list
+  const searchList = (searchText: string) => {
+    const test = todoListsArray.filter((item: any) => (item.title || item.description) === searchText);
+
+    console.log(test);
+  }
+
   return (
     <SafeAreaView>
+      <SearchBar search={searchList} />
       <Text>Main List</Text>
       {todoListsArray && todoListsArray.length > 0 ?
         todoListsArray.map((item: any) => (
