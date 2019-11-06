@@ -42,7 +42,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       // Mark the todo item as completed
       filteredList.children[markedItemIndex] = {
         ...filteredList.children[markedItemIndex],
-        completed: true
+        completed: !filteredList.children[markedItemIndex].completed
       }
 
       // Update the lists
