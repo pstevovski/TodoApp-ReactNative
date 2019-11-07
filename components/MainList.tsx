@@ -9,11 +9,12 @@ import SearchBar from "./SearchBar";
 const MainList = (props: any) => {
   const { getItem } = useAsyncStorage("@todoList");
   const [todoListsArray, setTodoListsArray] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   // Read saved items from local storage on any(??) update to the state
   useEffect(() => {
     readListFromStorage();
-  })
+  }, [todoListsArray])
 
   const readListFromStorage = async () => {
     const list = await getItem();
@@ -26,11 +27,14 @@ const MainList = (props: any) => {
     }
   }
 
-  // Filter list
+  // Set the text to be used to filter the list out
   const searchList = (searchText: string) => {
-    const test = todoListsArray.filter((item: any) => (item.title || item.description) === searchText);
-
-    console.log(test);
+    if (searchText !== "") {
+      setSearchText(searchText);
+    } else {
+      setSearchText("");
+    }
+    console.log(searchText);
   }
 
   return (
@@ -38,16 +42,27 @@ const MainList = (props: any) => {
       <SearchBar search={searchList} />
       <Text>Main List</Text>
       {todoListsArray && todoListsArray.length > 0 ?
-        todoListsArray.map((item: any) => (
-          <TodoList
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            description={item.description}
-            date={item.date}
-            completed={item.listCompleted}
-          />
-        )) 
+          searchText && searchText.length > 0 ?
+            todoListsArray.filter((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText)).map((item: any) => (
+              <TodoList
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                description={item.description}
+                date={item.date}
+                completed={item.listCompleted}
+              />
+            ))
+          : todoListsArray.map((item: any) => (
+            <TodoList
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              description={item.description}
+              date={item.date}
+              completed={item.completed}
+            />
+          ))
       : null}
     </SafeAreaView>
   )

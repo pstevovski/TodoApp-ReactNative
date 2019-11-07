@@ -4,6 +4,7 @@ import TodoItem from "./TodoItem";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { withNavigation } from "react-navigation";
 import { useAsyncStorage } from "@react-native-community/async-storage";
+import SearchBar from "./SearchBar";
 
 interface TodoItemsListProps {
   id: string,
@@ -13,10 +14,11 @@ interface TodoItemsListProps {
 const TodoItemsList = (props: TodoItemsListProps) => {
   const { getItem, setItem } = useAsyncStorage("@todoList");
   const [items, setItems] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     getListData();
-  });
+  }, [items]);
 
   const getListData = async() => {
     const list = await getItem();
@@ -63,12 +65,32 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   }
 
+  // Set the text to be used to filter the list out
+  const searchTodos = (searchText: string) => {
+    if (searchText !== "") {
+      setSearchText(searchText);
+    } else {
+      setSearchText("");
+    }
+  }
+
   return (
     <View>
-      <Text>ID: {props.id} </Text>
+      <SearchBar search={searchTodos} />
 
       {items ? 
-        items.map((item: any) => (
+        searchText && searchText.length > 0 ?
+          items.filter((item: any) => item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+            <TodoItem
+              key={item.todoID}
+              todo={item.todo}
+              todoID={item.todoID}
+              date={item.date}
+              completed={item.completed}
+              onPress={markAsComplete}
+            />
+          ))
+       : items.map((item: any) => (
           <TodoItem
             key={item.todoID}
             todo={item.todo}
