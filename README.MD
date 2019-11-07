@@ -10,16 +10,18 @@ Simple Todo App made in React Native.
 - [x] Display todos from a specific list
 - [x] Long press on item to mark as completed
 - [x] If all items in a list are completed, mark list as completed
+- [x] Search trough lists / todos functionallity
+
 -----------------------------------------
-- [ ] Edit specific item
-- [ ] Remove specific item
+- [ ] Long press todo item opens menu that allows to:
+  - [ ] Edit specific item
+  - [x] Remove specific item
+  - [x] Mark todo as favorite
 - [ ] Styling
 - [ ] Animations
 - [ ] Checkmark for completed todos styling / animation
 - [ ] Custom splash screen - native code
 - [ ] Custom icon - native code
-- [ ] Hook for date update to be called from anywhere
-- [ ] Search trough lists / todos functionallity
 
 -----------------------------------------
 - [ ] Favorites
