@@ -18,6 +18,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [itemID, setItemID] = useState(String);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
 
+  // Get and Set items to favorites list
+  const { getItem: getFavorite, setItem: setFavorite } = useAsyncStorage("@todoListFavorites");
+
   useEffect(() => {
     getListData();
   }, [items]);
@@ -109,6 +112,40 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
     // Close the menubar
     openMenu(itemID);
+
+    // Clear item ID
+    setItemID("");
+  }
+
+  // Mark todo item as favorite
+  const markAsFavorite = async () => {
+    const favoritesList = await getFavorite();
+    let favorites = [];
+
+    if (favoritesList !== null) {
+      favorites = JSON.parse(favoritesList);
+    } else {
+      favorites = [];
+    }
+
+    // Find todo in list
+    const findTodo = items.find((todo: any) => todo.todoID === itemID);
+
+    // Prevent same todo to be added to favorites multiple times
+    if (!favorites.find((fav: any) => fav.todoID === itemID)) {
+      favorites.push(findTodo)
+    }
+
+    // Save to storage
+    await setFavorite(JSON.stringify(favorites));
+
+    // Close menu bar
+    openMenu(itemID);
+
+    // Clear item ID
+    setItemID("");
+
+    console.log(`FAVORITES: ${favoritesList}`);
   }
 
   return (
@@ -173,7 +210,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       }}>
         <Icon name="edit" size={30} color="grey" />
         <Icon name="delete" onPress={deleteTodo} size={30} color="grey" />
-        <Icon name="favorite" size={30} color="grey" />
+        <Icon name="favorite" onPress={markAsFavorite} size={30} color="grey" />
       </View>
     </View>
   )
