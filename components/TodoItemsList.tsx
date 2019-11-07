@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { withNavigation } from "react-navigation";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import SearchBar from "./SearchBar";
+import EditTodoModal from "./EditTodoModal";
 
 interface TodoItemsListProps {
   id: string,
@@ -82,9 +83,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   // Bottom menu bar
   const openMenu = async (id: string) => {
     // Save the id of the item to state
-    if (!itemID) {
-      setItemID(id);
-    }
+    setItemID(id);
 
     // Check if item is marked as favorite
     const favorites = await getFavorite();
@@ -163,6 +162,18 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     setItemID("");
   }
 
+  // Edit todo
+  const [isEditing, setIsEditing] = useState(false);
+  const editTodo = () => {
+    // Find the index of the todo
+    const findTodoIndex: number = items.findIndex((todo: any) => todo.todoID === itemID);
+    const todo = items[findTodoIndex];
+
+    setIsEditing(true);
+
+    openMenu(itemID);
+  }
+
   return (
     <View>
       <SearchBar search={searchTodos} />
@@ -194,20 +205,22 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       : null}
 
 
-      <Icon
-        onPress={() => props.navigation.navigate("CreateTodo", { 
-          type: "item",
-          title: "Add Todo",
-          id: props.id
-        })}
-        name="add-circle" 
-        size={70} 
-        color="#e1302a" style={{
-          position: "absolute",
-          right: 20,
-          top: Dimensions.get("screen").height - 220,
-        }}
-      />
+      {!menuBarOpen ? 
+        <Icon
+          onPress={() => props.navigation.navigate("CreateTodo", { 
+            type: "item",
+            title: "Add Todo",
+            id: props.id
+          })}
+          name="add-circle" 
+          size={70} 
+          color="#e1302a" style={{
+            position: "absolute",
+            right: 20,
+            top: Dimensions.get("screen").height - 220,
+          }}
+        />
+      : null}
 
       <View style={{
         flex: 1,
@@ -223,10 +236,13 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         left: 0,
         top: menuBarOpen ? Dimensions.get("screen").height - 180 : Dimensions.get("screen").height + 200,
       }}>
-        <Icon name="edit"     size={30} color="grey" />
+        <Icon name="edit"     onPress={editTodo} size={30} color="grey" />
         <Icon name="delete"   onPress={deleteTodo} size={30} color="grey" />
         <Icon name="favorite" onPress={markAsFavorite} size={30} color={isMarkedAsFavorite ? "#e1302a" : "grey"} />
       </View>
+
+      {/* EDIT TODO MODAL */}
+      {isEditing ? <EditTodoModal listId={props.id} todoId={itemID} todo="TEST TODO" /> : null}
     </View>
   )
 }
