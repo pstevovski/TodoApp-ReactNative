@@ -9,19 +9,15 @@ interface TodoItemProps {
   completed: boolean,
   date?: Date | string,
   onPress: (todoID: string) => void,
+  openMenu: (todoID: string) => void,
   navigation: any
 }
 
 const TodoItem = (props: TodoItemProps) => {
   return (
-    <TouchableOpacity 
-      onLongPress={() => props.onPress(props.todoID)}
-      onPress={() => props.navigation.navigate("CreateTodo", {
-        type: "item",
-        title: props.todo,
-        listTitleInput: props.todo,
-        state: "edit"
-      })}
+    <TouchableOpacity
+      onPress={() => props.onPress(props.todoID)}
+      onLongPress={() => props.openMenu(props.todoID)}
     >
       <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
         <View>

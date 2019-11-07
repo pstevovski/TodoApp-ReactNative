@@ -15,6 +15,8 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const { getItem, setItem } = useAsyncStorage("@todoList");
   const [items, setItems] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [itemID, setItemID] = useState(String);
+  const [menuBarOpen, setMenuBarOpen] = useState(false);
 
   useEffect(() => {
     getListData();
@@ -74,6 +76,51 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     }
   }
 
+  // Bottom menu bar
+  const openMenu = (id: string) => {
+    // Save the id of the item to state
+    setItemID(id);
+
+    // Open the menu
+    setMenuBarOpen(!menuBarOpen);
+  }
+
+  // Delete pressed todo item
+  const deleteTodo = async () => {
+    // const updatedItemsAfterDelete = items.filter((item: any) => item.todoID !== itemID);
+    const deltedTodoIndex = items.findIndex((todo: any) => todo.todoID === itemID);
+    const savedLists = await getItem();
+
+    if (savedLists) {
+      const listsAfterTodoIsDeleted = JSON.parse(savedLists);
+      let specificList = listsAfterTodoIsDeleted.find((list: any) => list.id === props.id);
+      const listIndex  = listsAfterTodoIsDeleted.findIndex((list: any) => list.id === props.id);
+      
+      // Remove todo element from the specific list
+      specificList.children.splice(deltedTodoIndex, 1);    
+
+      // Update the array containing all created lists
+      listsAfterTodoIsDeleted.splice(listIndex, 1, specificList);
+
+      // Save updated list to storage
+      await setItem(JSON.stringify(listsAfterTodoIsDeleted))
+    }
+
+    
+
+    // console.log("PARSED LIST", wholeList);
+    // console.log("FIND THE PARSED LIST", parsedList);
+
+    // console.log("TEST", items);
+    // console.log("DELETED ITEM", updatedItemsAfterDelete);
+
+    // console.log("CURRENT LIST", items);
+    // console.log("ALL LISTS", JSON.parse(list[props.id]));
+    
+    // // Save to storage
+    // await setItem(JSON.stringify(updatedItemsAfterDelete));
+  }
+
   return (
     <View>
       <SearchBar search={searchTodos} />
@@ -88,6 +135,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
               date={item.date}
               completed={item.completed}
               onPress={markAsComplete}
+              openMenu={openMenu}
             />
           ))
        : items.map((item: any) => (
@@ -98,6 +146,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
             date={item.date}
             completed={item.completed}
             onPress={markAsComplete}
+            openMenu={openMenu}
           />
         ))
       : null}
@@ -117,6 +166,25 @@ const TodoItemsList = (props: TodoItemsListProps) => {
           top: Dimensions.get("screen").height - 220,
         }}
       />
+
+      <View style={{
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width: "100%",
+        height: 50,
+        borderTopColor: "#333",
+        borderTopWidth: 1,
+        position: "absolute",
+        backgroundColor: "#fff",
+        left: 0,
+        top: menuBarOpen ? Dimensions.get("screen").height - 180 : Dimensions.get("screen").height + 200,
+      }}>
+        <Icon name="edit" size={30} color="grey" />
+        <Icon name="delete" onPress={deleteTodo} size={30} color="grey" />
+        <Icon name="favorite" size={30} color="grey" />
+      </View>
     </View>
   )
 }
