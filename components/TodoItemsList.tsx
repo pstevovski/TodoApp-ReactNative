@@ -79,15 +79,16 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   // Bottom menu bar
   const openMenu = (id: string) => {
     // Save the id of the item to state
-    setItemID(id);
+    if (!itemID) {
+      setItemID(id);
+    }
 
-    // Open the menu
+    // Toggle the menu
     setMenuBarOpen(!menuBarOpen);
   }
 
   // Delete pressed todo item
   const deleteTodo = async () => {
-    // const updatedItemsAfterDelete = items.filter((item: any) => item.todoID !== itemID);
     const deltedTodoIndex = items.findIndex((todo: any) => todo.todoID === itemID);
     const savedLists = await getItem();
 
@@ -106,19 +107,8 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       await setItem(JSON.stringify(listsAfterTodoIsDeleted))
     }
 
-    
-
-    // console.log("PARSED LIST", wholeList);
-    // console.log("FIND THE PARSED LIST", parsedList);
-
-    // console.log("TEST", items);
-    // console.log("DELETED ITEM", updatedItemsAfterDelete);
-
-    // console.log("CURRENT LIST", items);
-    // console.log("ALL LISTS", JSON.parse(list[props.id]));
-    
-    // // Save to storage
-    // await setItem(JSON.stringify(updatedItemsAfterDelete));
+    // Close the menubar
+    openMenu(itemID);
   }
 
   return (
