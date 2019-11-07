@@ -17,6 +17,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [searchText, setSearchText] = useState("");
   const [itemID, setItemID] = useState(String);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
+  const [isMarkedAsFavorite, setIsMarkedAsFavorite] = useState(false);
 
   // Get and Set items to favorites list
   const { getItem: getFavorite, setItem: setFavorite } = useAsyncStorage("@todoListFavorites");
@@ -39,7 +40,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     // Get saved list and find pressed todo
     const lists = await getItem();
     const markedItemIndex = items.findIndex((item: any) => item.todoID === id);
-    // const markedItem: any = items.find((item: any) => item.todoID === id);
 
     if (lists !== null) {
       // Find the list and its index that contains the marked todo
@@ -80,10 +80,22 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   }
 
   // Bottom menu bar
-  const openMenu = (id: string) => {
+  const openMenu = async (id: string) => {
     // Save the id of the item to state
     if (!itemID) {
       setItemID(id);
+    }
+
+    // Check if item is marked as favorite
+    const favorites = await getFavorite();
+    if (favorites) {
+      const checkIfFavoriteExists = JSON.parse(favorites).find((fav: any) => fav.todoID === id);
+
+      if (checkIfFavoriteExists) {
+        setIsMarkedAsFavorite(true);
+      } else {
+        setIsMarkedAsFavorite(false);
+      }
     }
 
     // Toggle the menu
@@ -134,6 +146,11 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     // Prevent same todo to be added to favorites multiple times
     if (!favorites.find((fav: any) => fav.todoID === itemID)) {
       favorites.push(findTodo)
+    } else {
+      // Remove from favorites list if clicked on icon if item is already marked as favorite
+      const favoriteIndex = favorites.findIndex((fav: any) => fav.todoID === itemID);
+      favorites.splice(favoriteIndex, 1);
+      setIsMarkedAsFavorite(false);
     }
 
     // Save to storage
@@ -144,8 +161,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
     // Clear item ID
     setItemID("");
-
-    console.log(`FAVORITES: ${favoritesList}`);
   }
 
   return (
@@ -208,9 +223,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         left: 0,
         top: menuBarOpen ? Dimensions.get("screen").height - 180 : Dimensions.get("screen").height + 200,
       }}>
-        <Icon name="edit" size={30} color="grey" />
-        <Icon name="delete" onPress={deleteTodo} size={30} color="grey" />
-        <Icon name="favorite" onPress={markAsFavorite} size={30} color="grey" />
+        <Icon name="edit"     size={30} color="grey" />
+        <Icon name="delete"   onPress={deleteTodo} size={30} color="grey" />
+        <Icon name="favorite" onPress={markAsFavorite} size={30} color={isMarkedAsFavorite ? "#e1302a" : "grey"} />
       </View>
     </View>
   )
