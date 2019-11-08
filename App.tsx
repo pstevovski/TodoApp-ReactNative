@@ -7,7 +7,6 @@ import {createStackNavigator} from "react-navigation-stack";
 
 // Import pages
 import Home from "./pages/Home";
-import TodoPage from "./pages/TodoPage";
 import AboutPage from "./pages/AboutPage";
 import CreateTodo from "./pages/CreateTodo"
 import TodoListPage from "./pages/TodoListPage";
@@ -16,7 +15,6 @@ import TodoListPage from "./pages/TodoListPage";
 const MainNavigator = createStackNavigator(
   {
     Home: Home,
-    Todos: TodoPage,
     About: AboutPage,
     CreateTodo: CreateTodo,
     SpecificTodoList: TodoListPage
