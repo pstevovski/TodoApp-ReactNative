@@ -10,6 +10,7 @@ interface TodoListProps {
   title: string,
   description: string,
   date: Date | string,
+  category: string,
   completed: boolean,
   navigation: any
 }
@@ -58,10 +59,12 @@ const TodoList = (props: TodoListProps) => {
       })}
       onLongPress={() => props.navigation.navigate("CreateTodo", {
         state: "edit",
+        type: "list",
         title: props.title,
         listTitleInput: props.title,
         desc: props.description,
-        id: props.id
+        id: props.id,
+        category: props.category
       })}
     >
       <View style={[todo.global, todo.list]}>

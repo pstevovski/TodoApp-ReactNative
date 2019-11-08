@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Picker } from "react-native";
 import AsyncStorage, { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
 
 // Unique IDs generator
 import uuid from "uuid";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const CreateTodo = (props: any) => {
   // const [editState, setEditState] = useState(false);
@@ -14,6 +15,7 @@ const CreateTodo = (props: any) => {
   // List properties
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [listCategory, setListCategory] = useState(String);
 
   useEffect(() => {
     readFromStorage();
@@ -53,6 +55,7 @@ const CreateTodo = (props: any) => {
       id: uuid.v4().slice(0, 8),
       title,
       description,
+      category: listCategory,
       date: `Created: ${currentDateAndTime()}`,
       children: [],
       listCompleted: false    
@@ -95,6 +98,7 @@ const CreateTodo = (props: any) => {
   const editState = () => {
     setTitle(props.navigation.getParam("listTitleInput"));
     setDescription(props.navigation.getParam("desc"));
+    setListCategory(props.navigation.getParam("category"));
   }
   
   const editItem = async () => {
@@ -108,6 +112,7 @@ const CreateTodo = (props: any) => {
         id,
         title,
         description,
+        category: listCategory,
         date: `Updated: ${currentDateAndTime()}`,
       }
     }
@@ -168,6 +173,26 @@ const CreateTodo = (props: any) => {
               textAlignVertical: "top"
             }}
           />
+
+          <View>
+            <Text>Select category: </Text>
+
+            <Picker
+              selectedValue={listCategory}
+              onValueChange={(itemValue: string) => setListCategory(itemValue)}
+              style={{
+                width: 170,
+                height: 40,
+              }}
+            > 
+              <Picker.Item label="Category #1" value="Category #1" />
+              <Picker.Item label="Category #2" value="Category #2" />
+              <Picker.Item label="Category #3" value="Category #3" />
+              <Picker.Item label="Category #4" value="Category #4" />
+            </Picker>
+
+          </View>
+
         </View>
       : null }
 

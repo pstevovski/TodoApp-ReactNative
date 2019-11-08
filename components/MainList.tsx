@@ -49,6 +49,7 @@ const MainList = (props: any) => {
                 id={item.id}
                 title={item.title}
                 description={item.description}
+                category={item.category}
                 date={item.date}
                 completed={item.listCompleted}
               />
@@ -59,6 +60,7 @@ const MainList = (props: any) => {
               id={item.id}
               title={item.title}
               description={item.description}
+              category={item.category}
               date={item.date}
               completed={item.completed}
             />
