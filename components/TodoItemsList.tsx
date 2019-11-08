@@ -25,7 +25,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   useEffect(() => {
     getListData();
-  }, [items]);
+  });
 
   const getListData = async() => {
     const list = await getItem();
@@ -164,12 +164,15 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   // Edit todo
   const [isEditing, setIsEditing] = useState(false);
+  const [editingTodoValue, setEditingTodoValue] = useState("");
   const editTodo = () => {
     // Find the index of the todo
     const findTodoIndex: number = items.findIndex((todo: any) => todo.todoID === itemID);
-    const todo = items[findTodoIndex];
+    const todo: any = items[findTodoIndex];
 
+    // Set editing mode and send todo value to editing modal
     setIsEditing(true);
+    setEditingTodoValue(todo.todo);
 
     openMenu(itemID);
   }
@@ -242,7 +245,17 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       </View>
 
       {/* EDIT TODO MODAL */}
-      {isEditing ? <EditTodoModal listId={props.id} todoId={itemID} todo="TEST TODO" /> : null}
+      {isEditing ? 
+        <EditTodoModal 
+          listId={props.id} 
+          todoId={itemID} 
+          todo={editingTodoValue}
+          closeModal={() => {
+            setIsEditing(false);
+            setEditingTodoValue("");
+          }}
+        />
+      : null}
     </View>
   )
 }
