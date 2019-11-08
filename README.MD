@@ -26,6 +26,7 @@ Simple Todo App made in React Native.
 - [ ] Favorites:
   - [x] Save todos as favorites
   - [ ] List todos marked as favorites
+  - [ ] Global hook / function call to mark favorite todos as completed and/or open the bottom menu
 
 # Potential feature
 - [ ] Categories:
