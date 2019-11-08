@@ -11,12 +11,11 @@ Simple Todo App made in React Native.
 - [x] Long press on item to mark as completed
 - [x] If all items in a list are completed, mark list as completed
 - [x] Search trough lists / todos functionallity
-
------------------------------------------
-- [ ] Long press todo item opens menu that allows to:
-  - [ ] Edit specific item
+- [x] Long press todo item opens menu that allows to:
+  - [x] Edit specific item
   - [x] Remove specific item
   - [x] Mark todo as favorite
+-----------------------------------------
 - [ ] Styling
 - [ ] Animations
 - [ ] Checkmark for completed todos styling / animation
@@ -24,5 +23,11 @@ Simple Todo App made in React Native.
 - [ ] Custom icon - native code
 
 -----------------------------------------
-- [ ] Favorites
-- [ ] Categories
+- [ ] Favorites:
+  - [x] Save todos as favorites
+  - [ ] List todos marked as favorites
+
+# Potential feature
+- [ ] Categories:
+  - [ ] List category property
+  - [ ] Display lists separated by the category
