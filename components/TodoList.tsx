@@ -10,7 +10,6 @@ interface TodoListProps {
   title: string,
   description: string,
   date: Date | string,
-  category: string,
   completed: boolean,
   navigation: any
 }
@@ -63,8 +62,7 @@ const TodoList = (props: TodoListProps) => {
         title: props.title,
         listTitleInput: props.title,
         desc: props.description,
-        id: props.id,
-        category: props.category
+        id: props.id
       })}
     >
       <View style={[todo.global, todo.list]}>
