@@ -188,6 +188,20 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   return (
     <>
     <ScrollView>
+      {isEditing ? 
+        <View style={{
+          height: "100%",
+          width: "100%",
+          flex: 1,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          backgroundColor: "#333",
+          opacity: 0.5,
+          elevation: 12
+        }}></View>
+      : null}
+
       <PageHeading id={props.id} extraIcon={true} />
 
       <View style={{
@@ -265,16 +279,26 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         </View>
 
         {/* EDIT TODO MODAL */}
-        {isEditing ? 
-          <EditTodoModal 
-            listId={props.id} 
-            todoId={itemID} 
-            todo={editingTodoValue}
-            closeModal={() => {
-              setIsEditing(false);
-              setEditingTodoValue("");
-            }}
-          />
+        {isEditing ?
+          <View style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            <EditTodoModal 
+              listId={props.id} 
+              todoId={itemID} 
+              todo={editingTodoValue}
+              closeModal={() => {
+                setIsEditing(false);
+                setEditingTodoValue("");
+              }}
+            />
+          </View>
         : null}
       </View>
     </ScrollView>

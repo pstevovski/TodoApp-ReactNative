@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Dimensions } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { buttons, text } from "../styles/styles";
 
 interface EditTodoModalProps {
   listId: string,
@@ -47,36 +48,42 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       justifyContent: "center",
       alignItems: "center",
       width: "90%",
-      height: 200,
-      backgroundColor: "#eee",
-      borderBottomColor: "#333",
-      borderBottomWidth: 3,
+      maxHeight: 200,
+      backgroundColor: "#fff",
+      borderWidth: 0,
       padding: 10,
-      position: "absolute",
-      top: Dimensions.get("screen").height / 2 - 200,
-      left: 0,
+      elevation: 13,
+      borderRadius: 10,
+      
     }}>
-      <Text>EDITING: {props.todo}</Text>
+      <Text style={[text.pBig, text.title]}>EDITING: {props.todo}</Text>
 
       <TextInput 
         value={editTodoInput} 
         onChangeText={(edit: string) => setEditTodoInput(edit)}
         autoFocus={true}
         style={{
-          width: 200,
-          height: 50,
+          maxWidth: 300,
+          width: "100%",
           backgroundColor: "#fff",
-          color: "#333"
+          color: "#333",
+          borderBottomWidth: 1,
+          borderBottomColor: "#999",
+          marginBottom: 20
         }}  
       />
 
-      <TouchableOpacity onPress={editTodo} style={{backgroundColor: "red"}}>
+      <TouchableOpacity onPress={editTodo} style={[buttons.global, buttons.md]}>
         <View>
           <Text>EDIT</Text>
         </View>
       </TouchableOpacity>
 
-      <Icon onPress={props.closeModal} name="close" size={30} color="#333" />
+      <Icon onPress={props.closeModal} name="close" size={30} color="#333" style={{
+        position: "absolute",
+        top: 5,
+        right: 5
+      }}/>
     </View>
   )
 }
