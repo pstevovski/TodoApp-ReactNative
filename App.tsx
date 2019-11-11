@@ -24,12 +24,13 @@ const MainNavigator = createStackNavigator(
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: "#fff",
-        elevation: 2
+        elevation: 2,
+        display: "none"
       },
-      headerTintColor: "#e1302a",
+      headerTintColor: "grey",
       headerTitleStyle: {
         fontSize: 26,
-        color: "#e1302a",
+        color: "grey",
       }
     }
   }
@@ -41,7 +42,7 @@ const AppContainer = createAppContainer(MainNavigator);
 const App = () => {
   return (
     <>
-      <StatusBar backgroundColor="#e1302a" barStyle="light-content" />
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <AppContainer />
     </>
   )
