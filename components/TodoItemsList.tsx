@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity, Platform } from "react-native";
 import TodoItem from "./TodoItem";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { withNavigation } from "react-navigation";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import SearchBar from "./SearchBar";
 import EditTodoModal from "./EditTodoModal";
+import { menubar, text } from "../styles/styles";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface TodoItemsListProps {
   id: string,
@@ -19,8 +21,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [itemID, setItemID] = useState(String);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [selectedItemText, setSelectedItemText] = useState("");
 
-  // Get and Set items to favorites list
+  // Get and Set items to bookmarks list
   const { getItem: getBookmarked, setItem: setBookmarked } = useAsyncStorage("@todoListBookmarks");
 
   useEffect(() => {
@@ -86,9 +89,13 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     setItemID(id);
 
     // Check if item is marked as favorite
-    const favorites = await getBookmarked();
-    if (favorites) {
-      const checkIfFavoriteExists = JSON.parse(favorites).find((fav: any) => fav.todoID === id);
+    const bookmarks = await getBookmarked();
+    if (bookmarks) {
+      const checkIfFavoriteExists = JSON.parse(bookmarks).find((fav: any) => fav.todoID === id);
+        
+      // Find the selected item and use its text
+      const selectedItem: any = items.find((item: any) => item.todoID === id);
+      setSelectedItemText(selectedItem.todo)
 
       if (checkIfFavoriteExists) {
         setIsBookmarked(true);
@@ -178,101 +185,134 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   }
 
   return (
-    <View>
-      <SearchBar search={searchTodos} />
+    <ScrollView>
+    <View style={{
+      flex: 1, 
+      justifyContent: "space-between",
+      alignContent: "center",
+      width: "100%",
+    }}>
+      <View>
+        <View style={{alignSelf: "center", padding: 20}}>
+          <SearchBar search={searchTodos} />
+        </View>
 
-      {/* COMPLETED ITEMS */}
-      {items.some((item: any) => item.completed) ? <Text>COMPLETED</Text> : null}
-      { items ?
-          searchText && searchText.length > 0 ?
-            items.filter((item: any) => item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
-              <TodoItem
-                key={item.todoID}
-                todo={item.todo}
-                todoID={item.todoID}
-                date={item.date}
-                completed={item.completed}
-                onPress={markAsComplete}
-                openMenu={openMenu}
-              />
-            ))
-          : items.filter((item: any) => item.completed).map((item: any) => (
-            <TodoItem
-              key={item.todoID}
-              todo={item.todo}
-              todoID={item.todoID}
-              date={item.date}
-              completed={item.completed}
-              onPress={markAsComplete}
-              openMenu={openMenu}
-            />
-          ))
-      : null }
+        {/* COMPLETED ITEMS */}
+        <View style={{paddingHorizontal: 20, paddingVertical: 10}}>
+          {items.some((item: any) => item.completed) ? <Text style={[text.sectionTitle, { marginBottom: 20}]}>COMPLETED</Text> : null}
+          { items ?
+              searchText && searchText.length > 0 ?
+                items.filter((item: any) => item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+                  <TodoItem
+                    key={item.todoID}
+                    todo={item.todo}
+                    todoID={item.todoID}
+                    date={item.date}
+                    completed={item.completed}
+                    onPress={markAsComplete}
+                    openMenu={openMenu}
+                  />
+                ))
+              : items.filter((item: any) => item.completed).map((item: any) => (
+                <TodoItem
+                  key={item.todoID}
+                  todo={item.todo}
+                  todoID={item.todoID}
+                  date={item.date}
+                  completed={item.completed}
+                  onPress={markAsComplete}
+                  openMenu={openMenu}
+                />
+              ))
+          : null }
 
-      {/* NOT COMPLETED ITEMS */}
-      {items.some((item: any) => !item.completed) ? <Text>NOT COMPLETED</Text> : null}
+          <View>
+            {/* NOT COMPLETED ITEMS */}
+            {items.some((item: any) => !item.completed) ? <Text style={[text.sectionTitle, { marginBottom: 20}]}>NOT COMPLETED</Text> : null}
 
-      { items ?
-          searchText && searchText.length > 0 ?
-            items.filter((item: any) => !item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
-              <TodoItem
-                key={item.todoID}
-                todo={item.todo}
-                todoID={item.todoID}
-                date={item.date}
-                completed={item.completed}
-                onPress={markAsComplete}
-                openMenu={openMenu}
-              />
-            ))
-        : items.filter((item: any) => !item.completed).map((item: any) => (
-          <TodoItem
-            key={item.todoID}
-            todo={item.todo}
-            todoID={item.todoID}
-            date={item.date}
-            completed={item.completed}
-            onPress={markAsComplete}
-            openMenu={openMenu}
-          />
-        ))
-      : null }
+            { items ?
+                searchText && searchText.length > 0 ?
+                  items.filter((item: any) => !item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+                    <TodoItem
+                      key={item.todoID}
+                      todo={item.todo}
+                      todoID={item.todoID}
+                      date={item.date}
+                      completed={item.completed}
+                      onPress={markAsComplete}
+                      openMenu={openMenu}
+                    />
+                  ))
+              : items.filter((item: any) => !item.completed).map((item: any) => (
+                <TodoItem
+                  key={item.todoID}
+                  todo={item.todo}
+                  todoID={item.todoID}
+                  date={item.date}
+                  completed={item.completed}
+                  onPress={markAsComplete}
+                  openMenu={openMenu}
+                />
+              ))
+            : null }
+          </View>
 
-      {!menuBarOpen ? 
-        <Icon
-          onPress={() => props.navigation.navigate("CreateTodo", { 
+        </View>
+      </View>
+
+      {!menuBarOpen ?
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("CreateTodo", {
             type: "item",
             title: "Add Todo",
             id: props.id
           })}
-          name="add-circle" 
-          size={70} 
-          color="#e1302a" style={{
+          activeOpacity={0.5} 
+          style={{
+            width:  60,
+            height: 60,
+            borderRadius: 100,
+            backgroundColor: "#fff",
+            justifyContent: "center",
+            alignItems: "center",
+            shadowColor: "#333",
+            elevation: (Platform.OS === "android") ? 30 : 8,
             position: "absolute",
             right: 20,
             top: Dimensions.get("screen").height - 220,
+            zIndex: 10
           }}
-        />
+        >
+          <Icon name="add" size={30} color="grey" />
+        </TouchableOpacity>
       : null}
 
-      <View style={{
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        width: "100%",
-        height: 50,
-        borderTopColor: "#333",
-        borderTopWidth: 1,
-        position: "absolute",
-        backgroundColor: "#fff",
-        left: 0,
-        top: menuBarOpen ? Dimensions.get("screen").height - 180 : Dimensions.get("screen").height + 200,
-      }}>
-        <Icon name="edit"     onPress={editTodo} size={30} color="grey" />
-        <Icon name="delete"   onPress={deleteTodo} size={30} color="grey" />
-        <Icon name="favorite" onPress={bookmarkTodo} size={30} color={isBookmarked ? "#e1302a" : "grey"} />
-      </View>
+      {menuBarOpen ?
+        <View style={menubar.main}>
+          <View style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: 40,
+            alignItems: "center",
+            width: "100%"
+          }}>
+            <View style={menubar.container}>
+              <Icon name="edit" onPress={editTodo} size={30} color="grey" />
+              <Text style={menubar.text}>Edit</Text>
+            </View>
+            <View style={[menubar.container, {
+              marginLeft: 30
+            }]}>
+              <Icon name="delete-forever" onPress={deleteTodo} size={30} color="grey" />
+              <Text style={menubar.text}>Delete</Text>
+            </View>
+            <View style={menubar.container}>
+              <Icon name="bookmark" onPress={bookmarkTodo} size={30} color={isBookmarked ? "#e1302a" : "grey"} />
+              <Text style={menubar.text}>Bookmark</Text>
+            </View>
+          </View>
+        </View>
+      : null }
 
       {/* EDIT TODO MODAL */}
       {isEditing ? 
@@ -287,6 +327,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         />
       : null}
     </View>
+    </ScrollView>
   )
 }
 
