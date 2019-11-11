@@ -18,10 +18,10 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [searchText, setSearchText] = useState("");
   const [itemID, setItemID] = useState(String);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
-  const [isMarkedAsFavorite, setIsMarkedAsFavorite] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // Get and Set items to favorites list
-  const { getItem: getFavorite, setItem: setFavorite } = useAsyncStorage("@todoListFavorites");
+  const { getItem: getBookmarked, setItem: setBookmarked } = useAsyncStorage("@todoListBookmarks");
 
   useEffect(() => {
     getListData();
@@ -86,14 +86,14 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     setItemID(id);
 
     // Check if item is marked as favorite
-    const favorites = await getFavorite();
+    const favorites = await getBookmarked();
     if (favorites) {
       const checkIfFavoriteExists = JSON.parse(favorites).find((fav: any) => fav.todoID === id);
 
       if (checkIfFavoriteExists) {
-        setIsMarkedAsFavorite(true);
+        setIsBookmarked(true);
       } else {
-        setIsMarkedAsFavorite(false);
+        setIsBookmarked(false);
       }
     }
 
@@ -129,31 +129,31 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   }
 
   // Mark todo item as favorite
-  const markAsFavorite = async () => {
-    const favoritesList = await getFavorite();
-    let favorites = [];
+  const bookmarkTodo = async () => {
+    const bookmarksList = await getBookmarked();
+    let bookmarks = [];
 
-    if (favoritesList !== null) {
-      favorites = JSON.parse(favoritesList);
+    if (bookmarksList !== null) {
+      bookmarks = JSON.parse(bookmarksList);
     } else {
-      favorites = [];
+      bookmarks = [];
     }
 
     // Find todo in list
     const findTodo = items.find((todo: any) => todo.todoID === itemID);
 
-    // Prevent same todo to be added to favorites multiple times
-    if (!favorites.find((fav: any) => fav.todoID === itemID)) {
-      favorites.push(findTodo)
+    // Prevent same todo to be added to bookmarks multiple times
+    if (!bookmarks.find((bookmark: any) => bookmark.todoID === itemID)) {
+      bookmarks.push(findTodo)
     } else {
-      // Remove from favorites list if clicked on icon if item is already marked as favorite
-      const favoriteIndex = favorites.findIndex((fav: any) => fav.todoID === itemID);
-      favorites.splice(favoriteIndex, 1);
-      setIsMarkedAsFavorite(false);
+      // Remove from bookmarks list if clicked on icon if item is already marked as favorite
+      const bookmarkedIndex = bookmarks.findIndex((bookmark: any) => bookmark.todoID === itemID);
+      bookmarks.splice(bookmarkedIndex, 1);
+      setIsBookmarked(false);
     }
 
     // Save to storage
-    await setFavorite(JSON.stringify(favorites));
+    await setBookmarked(JSON.stringify(bookmarks));
 
     // Close menu bar
     openMenu(itemID);
@@ -241,7 +241,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       }}>
         <Icon name="edit"     onPress={editTodo} size={30} color="grey" />
         <Icon name="delete"   onPress={deleteTodo} size={30} color="grey" />
-        <Icon name="favorite" onPress={markAsFavorite} size={30} color={isMarkedAsFavorite ? "#e1302a" : "grey"} />
+        <Icon name="favorite" onPress={bookmarkTodo} size={30} color={isBookmarked ? "#e1302a" : "grey"} />
       </View>
 
       {/* EDIT TODO MODAL */}

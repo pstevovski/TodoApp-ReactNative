@@ -78,7 +78,9 @@ const CreateTodo = (props: any) => {
         todo: title,
         todoID: uuid.v4().slice(0, 8),
         date: `Added: ${currentDateAndTime()}`,
-        completed: false
+        completed: false,
+        todoListID: list.id,
+        todoListTitle: list.title
       })
     }
 

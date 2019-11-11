@@ -14,21 +14,20 @@ Simple Todo App made in React Native.
 - [x] Long press todo item opens menu that allows to:
   - [x] Edit specific item
   - [x] Remove specific item
-  - [x] Mark todo as favorite
+  - [x] Bookmark todo
+- [x] No lists found screen
 -----------------------------------------
 - [ ] Styling
 - [ ] Animations
 - [ ] Checkmark for completed todos styling / animation
 - [ ] Custom splash screen - native code
 - [ ] Custom icon - native code
+- [ ] Sort completed todos in a list to show on top
+- [ ] Page transitions
 
 -----------------------------------------
-- [ ] Favorites:
-  - [x] Save todos as favorites
-  - [ ] List todos marked as favorites
-  - [ ] Global hook / function call to mark favorite todos as completed and/or open the bottom menu
-
-# Potential feature
-- [ ] Categories:
-  - [ ] List category property
-  - [ ] Display lists separated by the category
+- [x] Bookmarks (important todos): 
+  - [x] Remove favorites option
+  - [x] Add Bookmarking option
+  - [x] Display Bookmarked todos on main page
+  - [x] Bookmarked todos when clicked - link to their list / toggle completed / not completed. 
