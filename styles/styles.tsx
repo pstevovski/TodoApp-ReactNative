@@ -19,7 +19,11 @@ export const text = StyleSheet.create({
   },
   pageTitle: {
     fontSize: 32,
-    textAlign: "center"
+    textAlign: "center",
+    textAlignVertical: "center",
+    color: "#666",
+    fontWeight: "bold",
+    maxWidth: 220
   },
   listTitle: {
     fontSize: 28,
@@ -47,6 +51,12 @@ export const containers = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     bottom: 120
+  },
+  pageHeading: {
+    padding: 20,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between"
   }
 })
 
