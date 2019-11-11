@@ -22,7 +22,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [itemID, setItemID] = useState(String);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [selectedItemText, setSelectedItemText] = useState("");
 
   // Get and Set items to bookmarks list
   const { getItem: getBookmarked, setItem: setBookmarked } = useAsyncStorage("@todoListBookmarks");
@@ -94,10 +93,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     if (bookmarks) {
       const checkIfFavoriteExists = JSON.parse(bookmarks).find((fav: any) => fav.todoID === id);
         
-      // Find the selected item and use its text
-      const selectedItem: any = items.find((item: any) => item.todoID === id);
-      setSelectedItemText(selectedItem.todo)
-
       if (checkIfFavoriteExists) {
         setIsBookmarked(true);
       } else {
@@ -323,8 +318,8 @@ const TodoItemsList = (props: TodoItemsListProps) => {
             <Text style={menubar.text}>Delete</Text>
           </View>
           <View style={menubar.container}>
-            <Icon name="bookmark" onPress={bookmarkTodo} size={30} color={isBookmarked ? "#e1302a" : "grey"} />
-            <Text style={menubar.text}>Bookmark</Text>
+            <Icon name="bookmark" onPress={bookmarkTodo} size={30} color={isBookmarked ? "#1dd67a" : "grey"} />
+            <Text style={menubar.text}>{isBookmarked ? 'Bookmarked' : 'Bookmark'}</Text>
           </View>
         </View>
       </View>

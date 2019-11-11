@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, CheckBox } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
-import { todo } from "../styles/styles";
+import { todo, text } from "../styles/styles";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { icons } from "../styles/styles";
 
 interface TodoListProps {
   id: string,
@@ -66,21 +67,38 @@ const TodoList = (props: TodoListProps) => {
       })}
       style={{flexDirection: "row", alignItems: "center"}}
     >
-      <View style={[todo.global, todo.list]}>
+      <View style={[todo.global, todo.list, {
+        marginBottom: 30,
+        backgroundColor: props.completed ? "#1dd67a" : "#fff",
+        padding: 10
+      }]}>
+          {/* DATE */}
+          <Text style={[todo.date, { top: -20, right: 0}]}>{props.date}</Text>
+
+          {/* LIST TITLE AND DESCRIPTION */}
           <View>
+            <Text style={[text.pBig, text.title,{
+              textDecorationLine: props.completed ? "line-through" : "none",
+              textDecorationStyle: "solid",
+              color: props.completed ? "#fff" : "#555",
+              marginBottom: 10
+            }]}>{props.title}</Text>
             <Text style={{
               textDecorationLine: props.completed ? "line-through" : "none",
               textDecorationStyle: "solid",
-            }}>{props.title}</Text>
-            <Text style={{
-              textDecorationLine: props.completed ? "line-through" : "none",
-              textDecorationStyle: "solid",
+              color: props.completed ? "#fff" : "#555"
             }}>{props.description}</Text>
-            <Text>{props.date}</Text>
           </View>
 
       </View>
-      <Icon name="delete" size={30} onPress={() => deleteList(props.id)} />
+      
+      <View style={{
+        paddingHorizontal: 0,
+        marginBottom: 30
+      }}>
+        <Icon name="delete-forever" size={30} color="#999" onPress={() => deleteList(props.id)} />
+      </View>
+
     </TouchableOpacity>
   )
 }

@@ -34,6 +34,7 @@ export const text = StyleSheet.create({
     textAlign: "left",
     fontWeight: "bold",
     color: "#999",
+    textTransform: "uppercase"
   }
 })
 
@@ -100,7 +101,7 @@ export const todo = StyleSheet.create({
   // Todo List
   list: {
     maxWidth: 500,
-    width:  "80%",
+    width:  "85%",
     padding:   5,
     elevation: 3,
     borderRadius: 5,
@@ -110,7 +111,7 @@ export const todo = StyleSheet.create({
     backgroundColor: "#fff",
     shadowColor: "#333",
     shadowOpacity: 0.5,
-    elevation: 10,
+    elevation: 3,
     padding: 10,
     borderRadius: 5,
     marginBottom: 40,

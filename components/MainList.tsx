@@ -9,6 +9,8 @@ import SearchBar from "./SearchBar";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import TodoItem from "./TodoItem";
 import BookmarkedItem from "./BookmarkedItem";
+import { ScrollView } from "react-native-gesture-handler";
+import { text } from "../styles/styles";
 
 const MainList = (props: any) => {
   const { getItem } = useAsyncStorage("@todoList");
@@ -55,74 +57,86 @@ const MainList = (props: any) => {
 
   return (
     <SafeAreaView>
+      <ScrollView>
 
-      <View style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingVertical: 5,
-        paddingHorizontal: 10
-      }}>
-        <SearchBar search={searchList} />
-        <Icon name="note-add" size={30} color="grey" onPress={() => props.navigation.navigate("CreateTodo", {
-          type: "list",
-          title: "Create New List"
-        })} />
-      </View>
+        {/* PAGE HEADER */}
+        <View style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingVertical: 30,
+          paddingHorizontal: 20
+        }}>
+          <SearchBar search={searchList} />
+          <Icon name="note-add" size={30} color="grey" onPress={() => props.navigation.navigate("CreateTodo", {
+            type: "list",
+            title: "Create New List"
+          })} />
+        </View>
+        
+        <View style={{padding: 10}}>
+          <Text style={[text.sectionTitle, { marginBottom: 20}]}>Main List</Text>
+          {todoListsArray && todoListsArray.length > 0 ?
+              searchText && searchText.length > 0 ?
+                todoListsArray.filter((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText)).map((item: any) => (
+                  <TodoList
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    description={item.description}
+                    date={item.date}
+                    completed={item.listCompleted}
+                  />
+                ))
+              : todoListsArray.map((item: any) => (
+                <TodoList
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  description={item.description}
+                  date={item.date}
+                  completed={item.listCompleted}
+                />
+              ))
+          : null}
 
-      <Text>Main List</Text>
-      {todoListsArray && todoListsArray.length > 0 ?
-          searchText && searchText.length > 0 ?
-            todoListsArray.filter((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText)).map((item: any) => (
-              <TodoList
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                description={item.description}
+          <View style={{
+            marginBottom: 20,
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
+            <Text style={text.sectionTitle}>BOOKMARKS</Text>
+            <Icon name="bookmark" size={20} color="#999" style={{paddingLeft: 10}} />
+          </View>
+          {bookmarkedArray && bookmarkedArray.length > 0 ?
+            searchText && searchText.length > 0 ?
+              bookmarkedArray.filter((bookmark: any) => bookmark.todo.toLowerCase().includes(searchText))
+                            .map((item: any) => (
+                              <BookmarkedItem
+                                key={item.todoID}
+                                id={item.todoID}
+                                text={item.todo}
+                                listID={item.todoListID}
+                                listTitle={item.todoListTitle}
+                                completed={item.completed}
+                                date={item.date}
+                              />
+                            ))
+            : bookmarkedArray.map((item: any) => (
+              <BookmarkedItem
+                key={item.todoID}
+                id={item.todoID}
+                text={item.todo}
+                listID={item.todoListID}
+                listTitle={item.todoListTitle}
+                completed={item.completed}
                 date={item.date}
-                completed={item.listCompleted}
               />
             ))
-          : todoListsArray.map((item: any) => (
-            <TodoList
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              date={item.date}
-              completed={item.completed}
-            />
-          ))
-      : null}
-
-      <Text>BOOKMARKS</Text>
-      {bookmarkedArray && bookmarkedArray.length > 0 ?
-        searchText && searchText.length > 0 ?
-          bookmarkedArray.filter((bookmark: any) => bookmark.todo.toLowerCase().includes(searchText))
-                         .map((item: any) => (
-                          <BookmarkedItem
-                            key={item.todoID}
-                            id={item.todoID}
-                            text={item.todo}
-                            listID={item.todoListID}
-                            listTitle={item.todoListTitle}
-                            completed={item.completed}
-                            date={item.date}
-                          />
-                         ))
-        : bookmarkedArray.map((item: any) => (
-          <BookmarkedItem
-            key={item.todoID}
-            id={item.todoID}
-            text={item.todo}
-            listID={item.todoListID}
-            listTitle={item.todoListTitle}
-            completed={item.completed}
-            date={item.date}
-          />
-        ))
-      : null
-      }
+          : null
+          }
+        </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }

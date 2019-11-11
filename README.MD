@@ -16,18 +16,20 @@ Simple Todo App made in React Native.
   - [x] Remove specific item
   - [x] Bookmark todo
 - [x] No lists found screen
+- [x] Bookmarks (important todos): 
+  - [x] Remove favorites option
+  - [x] Add Bookmarking option
+  - [x] Display Bookmarked todos on main page
+  - [x] Bookmarked todos when clicked - link to their list / toggle completed / not completed.
+  - [ ] Option to remove bookmarked item from main screen
 -----------------------------------------
 - [ ] Styling
 - [ ] Animations
 - [ ] Checkmark for completed todos styling / animation
 - [ ] Custom splash screen - native code
 - [ ] Custom icon - native code
-- [ ] Sort completed todos in a list to show on top
 - [ ] Page transitions
-
+- [x] Sort completed todos in a list to show on top
+ - [ ] Hide Completed/Not Completed text when filtering todos trough the search bar
 -----------------------------------------
-- [x] Bookmarks (important todos): 
-  - [x] Remove favorites option
-  - [x] Add Bookmarking option
-  - [x] Display Bookmarked todos on main page
-  - [x] Bookmarked todos when clicked - link to their list / toggle completed / not completed. 
+

@@ -48,7 +48,7 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       justifyContent: "center",
       alignItems: "center",
       width: "90%",
-      maxHeight: 200,
+      maxHeight: 220,
       backgroundColor: "#fff",
       borderWidth: 0,
       padding: 10,
@@ -56,7 +56,7 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       borderRadius: 10,
       
     }}>
-      <Text style={[text.pBig, text.title]}>EDITING: {props.todo}</Text>
+      <Text style={[text.pBig, text.title, { maxWidth: 250}]}>EDITING: {props.todo}</Text>
 
       <TextInput 
         value={editTodoInput} 
