@@ -5,6 +5,7 @@ import { withNavigation } from "react-navigation";
 
 // Unique IDs generator
 import uuid from "uuid";
+import PageHeading from "../components/PageHeading";
 
 const CreateTodo = (props: any) => {
   // const [editState, setEditState] = useState(false);
@@ -141,6 +142,8 @@ const CreateTodo = (props: any) => {
 
   return (
     <View>
+      <PageHeading id="" extraIcon={false} />
+
       {/* List / Item title */}
       <View>
         <Text>Title: </Text>
