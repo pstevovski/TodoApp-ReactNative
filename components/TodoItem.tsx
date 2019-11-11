@@ -19,7 +19,11 @@ const TodoItem = (props: TodoItemProps) => {
       onPress={() => props.onPress(props.todoID)}
       onLongPress={() => props.openMenu(props.todoID)}
     >
-      <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+      <View style={{
+        flexDirection: "row", 
+        justifyContent: "space-between", 
+        alignItems: "center"
+      }}>
         <View>
           <Text style={{
             textDecorationLine: props.completed ? "line-through" : 'none',

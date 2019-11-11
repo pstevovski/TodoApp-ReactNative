@@ -64,6 +64,7 @@ const TodoList = (props: TodoListProps) => {
         desc: props.description,
         id: props.id
       })}
+      style={{flexDirection: "row", alignItems: "center"}}
     >
       <View style={[todo.global, todo.list]}>
           <View>
@@ -78,8 +79,8 @@ const TodoList = (props: TodoListProps) => {
             <Text>{props.date}</Text>
           </View>
 
-          <Icon name="delete" size={30} onPress={() => deleteList(props.id)} />
       </View>
+      <Icon name="delete" size={30} onPress={() => deleteList(props.id)} />
     </TouchableOpacity>
   )
 }
