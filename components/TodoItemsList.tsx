@@ -181,9 +181,22 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     <View>
       <SearchBar search={searchTodos} />
 
-      {items ? 
-        searchText && searchText.length > 0 ?
-          items.filter((item: any) => item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+      {/* COMPLETED ITEMS */}
+      {items.some((item: any) => item.completed) ? <Text>COMPLETED</Text> : null}
+      { items ?
+          searchText && searchText.length > 0 ?
+            items.filter((item: any) => item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+              <TodoItem
+                key={item.todoID}
+                todo={item.todo}
+                todoID={item.todoID}
+                date={item.date}
+                completed={item.completed}
+                onPress={markAsComplete}
+                openMenu={openMenu}
+              />
+            ))
+          : items.filter((item: any) => item.completed).map((item: any) => (
             <TodoItem
               key={item.todoID}
               todo={item.todo}
@@ -194,7 +207,25 @@ const TodoItemsList = (props: TodoItemsListProps) => {
               openMenu={openMenu}
             />
           ))
-       : items.map((item: any) => (
+      : null }
+
+      {/* NOT COMPLETED ITEMS */}
+      {items.some((item: any) => !item.completed) ? <Text>NOT COMPLETED</Text> : null}
+
+      { items ?
+          searchText && searchText.length > 0 ?
+            items.filter((item: any) => !item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+              <TodoItem
+                key={item.todoID}
+                todo={item.todo}
+                todoID={item.todoID}
+                date={item.date}
+                completed={item.completed}
+                onPress={markAsComplete}
+                openMenu={openMenu}
+              />
+            ))
+        : items.filter((item: any) => !item.completed).map((item: any) => (
           <TodoItem
             key={item.todoID}
             todo={item.todo}
@@ -205,8 +236,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
             openMenu={openMenu}
           />
         ))
-      : null}
-
+      : null }
 
       {!menuBarOpen ? 
         <Icon
