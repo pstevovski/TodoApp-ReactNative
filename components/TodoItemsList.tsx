@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Dimensions, TouchableOpacity, Platform } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity, Platform, RefreshControl } from "react-native";
 import TodoItem from "./TodoItem";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { withNavigation } from "react-navigation";
@@ -180,9 +180,23 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     openMenu(itemID);
   }
 
+  // Reload page on pull
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    await getListData();
+
+    setRefreshing(false);
+  }
+
   return (
     <>
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {isEditing ? 
         <View style={{
           height: "100%",

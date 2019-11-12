@@ -9,7 +9,7 @@ interface PageHeadingProps {
   id: string,
   extraIcon?: boolean,
   extraIconType?: string;
-  clearList?: () => void
+  clearList?: () => void;
 }
 
 const PageHeading = (props: PageHeadingProps) => {
@@ -17,7 +17,7 @@ const PageHeading = (props: PageHeadingProps) => {
     <View style={[containers.pageHeading, {
       justifyContent: props.extraIcon ? "space-between" : "flex-start"
     }]}>
-      <TouchableOpacity onPress={() => props.navigation.pop()}>
+        <TouchableOpacity onPress={() => props.navigation.pop()}>
           <Icon name="arrow-back" size={40} color="#999" />
         </TouchableOpacity>
 

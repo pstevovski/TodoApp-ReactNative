@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, FlatList } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, SafeAreaView, FlatList, RefreshControl } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
 
@@ -44,6 +44,8 @@ const MainList = (props: any) => {
       setBookmarkedArray([]);
     }
 
+
+    console.log("CONTENT LOADED");
   }
 
   // Set the text to be used to filter the list out
@@ -55,9 +57,22 @@ const MainList = (props: any) => {
     }
   }
 
+  // Reload page on pull
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    await readListFromStorage();
+
+    setRefreshing(false);
+  }
+  
+
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
 
         {/* PAGE HEADER */}
         <View style={{
