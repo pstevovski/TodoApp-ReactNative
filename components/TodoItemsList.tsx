@@ -197,7 +197,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         }}></View>
       : null}
 
-      <PageHeading id={props.id} extraIcon={true} />
+      <PageHeading id={props.id} extraIcon={true} extraIconType="addTodo" />
 
       <View style={{
         flex: 1, 

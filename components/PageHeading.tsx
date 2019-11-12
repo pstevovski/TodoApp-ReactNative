@@ -7,7 +7,9 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 interface PageHeadingProps {
   navigation?: any,
   id: string,
-  extraIcon?: boolean
+  extraIcon?: boolean,
+  extraIconType?: string;
+  clearList?: () => void
 }
 
 const PageHeading = (props: PageHeadingProps) => {
@@ -26,15 +28,19 @@ const PageHeading = (props: PageHeadingProps) => {
         }]}>{props.navigation.getParam("title")}</Text>
         
         {props.extraIcon ?
-          <Icon onPress={() => props.navigation.navigate("CreateTodo", {
-              type: "item",
-              title: "Add Todo",
-              id: props.id
-            })} 
-            name="playlist-add" 
-            size={40} 
-            color="#999" 
-          /> : null}
+          props.extraIconType === "addTodo" ?
+            <Icon onPress={() => props.navigation.navigate("CreateTodo", {
+                type: "item",
+                title: "Add Todo",
+                id: props.id
+              })} 
+              name="playlist-add" 
+              size={40} 
+              color="#999" 
+            />
+          : 
+            <Icon onPress={props.clearList} name="delete-forever" size={40} color="#999" />
+        : null}
     </View>
   )
 }

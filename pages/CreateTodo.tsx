@@ -142,56 +142,77 @@ const CreateTodo = (props: any) => {
 
   return (
     <View>
-      <PageHeading id="" extraIcon={false} />
+      <PageHeading id="" extraIcon={true} clearList={() => clearStorage()} />
 
       {/* List / Item title */}
-      <View>
+      <View style={{
+        padding: 20
+      }}>
         <Text>Title: </Text>
         <TextInput
-          placeholder="Title"
+          placeholder="Enter title..."
           onChangeText={(title: string) => setTitle(title)}
           value={title}
           style={{
             borderBottomWidth: 2,
-            borderBottomColor: "#e1302a"
+            borderBottomColor: "#444"
           }}
         />
       </View>
       
       {/* List / Item description */}
       {props.navigation.getParam("type") === "list" ? 
-        <View>
+        <View style={{
+          padding: 20
+        }}>
           <Text>Description: </Text>
           <TextInput
-            placeholder="Description"
+            placeholder="Enter description"
             onChangeText={(description: string) => setDescription(description)}
             value={description}
             multiline={true}
             numberOfLines={8}
             style={{
               padding: 10,
-              textAlignVertical: "top"
+              textAlignVertical: "top",
+              borderBottomColor: "#444",
+              borderBottomWidth: 2
             }}
           />
         </View>
       : null }
 
       {/* Save / Edit button */}
-      <TouchableOpacity onPress={() => {
-        if (props.navigation.getParam("state") === "edit") {
-          editItem();
-        } else if (props.navigation.getParam("type") === "item") {
-          addTodoToList();
-        } else {
-          saveList();
-        }
+      <View style={{
+        margin: 20,
+        alignItems: "center"
       }}>
-        <View>
-          <Text>{props.navigation.getParam("state") === "edit" ? 'Edit List' : 'Create List'}</Text>
-        </View>
-      </TouchableOpacity>
-
-      <Text onPress={clearStorage}>CLEAR</Text>
+        <TouchableOpacity onPress={() => {
+          if (props.navigation.getParam("state") === "edit") {
+            editItem();
+          } else if (props.navigation.getParam("type") === "item") {
+            addTodoToList();
+          } else {
+            saveList();
+          }
+        }} style={{
+          padding: 10,
+          borderWidth: 1,
+          borderColor: "#999",
+          borderRadius: 25,
+          width: 120,
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+          <View>
+            {props.navigation.getParam("type") === "list" ?
+              <Text>{props.navigation.getParam("state") === "edit" ? 'Edit List' : 'Create List'}</Text>
+            :
+              <Text>Add todo</Text>
+            }
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
