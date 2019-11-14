@@ -33,7 +33,7 @@ Simple Todo App made in React Native.
 - [ ] Checkmark for completed todos styling / animation
 - [ ] Custom splash screen - native code
 - [ ] Custom icon - native code
-- [ ] Page transitions
+- [x] Page transitions
 - [x] Sort completed todos in a list to show on top
  - [ ] Hide Completed/Not Completed text when filtering todos trough the search bar
 -----------------------------------------

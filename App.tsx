@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from "react-native";
+import { StatusBar, Easing, Animated } from "react-native";
 
 // React navigation
 import {createAppContainer} from "react-navigation";
@@ -11,6 +11,9 @@ import AboutPage from "./pages/AboutPage";
 import CreateTodo from "./pages/CreateTodo"
 import TodoListPage from "./pages/TodoListPage";
 
+// Page transition configuration
+import transitionConfig from "./styles/PageTransitionConfiguration";
+
 // Create navigation routes
 const MainNavigator = createStackNavigator(
   {
@@ -21,6 +24,7 @@ const MainNavigator = createStackNavigator(
   },
   {
     initialRouteName: "Home",
+    transitionConfig,
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: "#fff",
