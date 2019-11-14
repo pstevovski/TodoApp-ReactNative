@@ -43,9 +43,6 @@ const MainList = (props: any) => {
     } else {
       setBookmarkedArray([]);
     }
-
-
-    console.log("CONTENT LOADED");
   }
 
   // Set the text to be used to filter the list out
@@ -113,7 +110,7 @@ const MainList = (props: any) => {
                   completed={item.listCompleted}
                 />
               ))
-          : null}
+          : <Text style={text.p}>No lists found.</Text>}
 
           <View style={{
             marginBottom: 20,
@@ -121,7 +118,7 @@ const MainList = (props: any) => {
             alignItems: "center"
           }}>
             <Text style={text.sectionTitle}>BOOKMARKS</Text>
-            <Icon name="bookmark" size={20} color="#999" style={{paddingLeft: 10}} />
+            <Icon name="bookmark" size={25} color="#1dd67a" style={{paddingLeft: 10}} />
           </View>
           {bookmarkedArray && bookmarkedArray.length > 0 ?
             searchText && searchText.length > 0 ?
@@ -148,7 +145,7 @@ const MainList = (props: any) => {
                 date={item.date}
               />
             ))
-          : null
+          : <Text style={text.p}>No bookmarks found.</Text>
           }
         </View>
       </ScrollView>

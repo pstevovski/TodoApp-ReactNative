@@ -91,9 +91,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     // Check if item is marked as favorite
     const bookmarks = await getBookmarked();
     if (bookmarks) {
-      const checkIfFavoriteExists = JSON.parse(bookmarks).find((fav: any) => fav.todoID === id);
+      const checkIfBookmarkExists = JSON.parse(bookmarks).find((fav: any) => fav.todoID === id);
         
-      if (checkIfFavoriteExists) {
+      if (checkIfBookmarkExists) {
         setIsBookmarked(true);
       } else {
         setIsBookmarked(false);

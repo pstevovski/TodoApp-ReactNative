@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, CheckBox } from "react-native";
-import { useAsyncStorage } from "@react-native-community/async-storage";
+import AsyncStorage, { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
 import { todo, text } from "../styles/styles";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { icons } from "../styles/styles";
 
 interface TodoListProps {
   id: string,
@@ -42,9 +41,14 @@ const TodoList = (props: TodoListProps) => {
     if (list !== null) {
       // Filter the array and remove item if IDs dont match
       const filteredArray = JSON.parse(list).filter((item: any) => item.id !== id)
-      
-      // Update the saved array
-      await setItem(JSON.stringify(filteredArray));
+
+      if ( filteredArray === [] ) {
+        // Clear storage from bookmarks and lists if last list is deleted
+        await AsyncStorage.clear();
+      } else {
+        // Update the saved array
+        await setItem(JSON.stringify(filteredArray));
+      }
     }
 
   }

@@ -36,14 +36,21 @@ const Home = (props: any) => {
       {lists && lists.length > 0 ?
         <MainList />
       :
-        <View>
-          <Text>No lists found.</Text>
-          <Text>Create a new one?</Text>
-          <TouchableOpacity onPress={() => props.navigation.navigate("CreateTodo", {
-            type: "list",
-            title: "Create New List"
-          })}>
-            <Text>New</Text>
+        <View style={{
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+          <Text style={[text.listTitle, { marginBottom: 10}]}>No lists found.</Text>
+          <Text style={[text.pBig, { marginBottom: 20}]}>Create a new one?</Text>
+          <TouchableOpacity 
+            onPress={() => props.navigation.navigate("CreateTodo", {
+              type: "list",
+              title: "Create New List"
+            })}
+            style={[buttons.global, buttons.md]}
+          >
+            <Text style={text.p}>New</Text>
           </TouchableOpacity>
         </View>
       }

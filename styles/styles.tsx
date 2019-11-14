@@ -21,7 +21,7 @@ export const text = StyleSheet.create({
     fontSize: 32,
     textAlign: "center",
     textAlignVertical: "center",
-    color: "#666",
+    color: "#444",
     fontWeight: "bold",
     maxWidth: 220
   },
@@ -33,7 +33,7 @@ export const text = StyleSheet.create({
     fontSize: 24,
     textAlign: "left",
     fontWeight: "bold",
-    color: "#999",
+    color: "#444",
     textTransform: "uppercase"
   }
 })
