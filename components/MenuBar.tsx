@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, Animated, Easing } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 // Style
@@ -15,8 +15,36 @@ interface MenuBarProps {
 }
 
 const MenuBar = (props: MenuBarProps) => {
+  const [translateYValue] = useState(new Animated.Value(0));
+
+  // When component mounts / unmounts
+  useEffect(() => {
+    translateYValue.setValue(0); // Reset to initial value
+
+    Animated.timing(
+      translateYValue,
+      {
+        toValue: 1,
+        duration: 1250,
+        easing: Easing.bounce,
+        useNativeDriver: true
+      }
+    ).start();
+  }, [])
+
+  const animatedTranslateY = translateYValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [ 100, 0]
+  })
+
   return (
-    <View style={menubar.main}>
+    <Animated.View style={[menubar.main, {
+      transform: [
+        {
+          translateY: animatedTranslateY
+        }
+      ]
+    }]}>
       <View style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -39,7 +67,7 @@ const MenuBar = (props: MenuBarProps) => {
           <Text style={menubar.text}>{props.isBookmarked ? 'Bookmarked' : 'Bookmark'}</Text>
         </View>
       </View>
-    </View>
+    </Animated.View>
   )
 }
 

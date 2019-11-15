@@ -13,7 +13,7 @@ const SearchBar = (props: SearchBarProps) => {
       <Icon name="search" size={25} color="#999" style={{
         position: "absolute",
         top:  8,
-        left: 15
+        left: -15
       }} />
       <TextInput 
         placeholder="Search..." 

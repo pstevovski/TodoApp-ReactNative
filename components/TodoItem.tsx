@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Animated, Easing } from "react-native";
 
 import { withNavigation } from "react-navigation";
 
@@ -18,8 +18,12 @@ interface TodoItemProps {
 }
 
 const TodoItem = (props: TodoItemProps) => {
+
   return (
-    <View style={{flexDirection: "row", alignItems: "center"}}>
+    <Animated.View style={{
+      flexDirection: "row", 
+      alignItems: "center",
+    }}>
       <TouchableOpacity
         onPress={() => props.onPress(props.todoID)}
         onLongPress={() => props.openMenu(props.todoID)}
@@ -45,15 +49,15 @@ const TodoItem = (props: TodoItemProps) => {
       </TouchableOpacity>
 
       {props.completed ?
-        <View style={icons.itemIcons}>
+        <Animated.View style={icons.itemIcons}>
           <Icon name="check-circle-outline" size={30} color="#1dd67a" />
-        </View>
+        </Animated.View>
       : 
-        <View style={icons.itemIcons}>
+        <Animated.View style={icons.itemIcons}>
           <Icon name="close-circle-outline" size={30} color="#e1302a" />
-        </View>
+        </Animated.View>
       }
-    </View>
+    </Animated.View>
   )
 }
 

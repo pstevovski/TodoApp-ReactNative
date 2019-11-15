@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, SafeAreaView, FlatList, RefreshControl } from "react-native";
+import { View, Text, SafeAreaView, FlatList, RefreshControl, Animated, Easing } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
 
@@ -63,7 +63,27 @@ const MainList = (props: any) => {
 
     setRefreshing(false);
   }
-  
+
+  // Main screen animation
+  const [contentAnimation] = useState(new Animated.Value(0));
+  useEffect(() => {
+    // contentAnimation.setValue(0);
+
+    Animated.timing(contentAnimation, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.ease,
+      useNativeDriver: true
+    }).start()
+  }, [])
+  const contentAnimationValueY = contentAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [250, 0]
+  })
+  const contentAnimationValueOpacity = contentAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1]
+  })
 
   return (
     <SafeAreaView>
@@ -86,7 +106,15 @@ const MainList = (props: any) => {
           })} />
         </View>
         
-        <View style={{padding: 10}}>
+        <Animated.View style={{
+          padding: 10,
+          opacity: contentAnimationValueOpacity,
+          transform: [
+            {
+              translateY: contentAnimationValueY
+            }
+          ]
+        }}>
           <Text style={[text.sectionTitle, { marginBottom: 20}]}>Main List</Text>
           {todoListsArray && todoListsArray.length > 0 ?
               searchText && searchText.length > 0 ?
@@ -147,7 +175,7 @@ const MainList = (props: any) => {
             ))
           : <Text style={text.p}>No bookmarks found.</Text>
           }
-        </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   )
