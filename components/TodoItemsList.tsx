@@ -9,6 +9,7 @@ import EditTodoModal from "./EditTodoModal";
 import { menubar, text, containers } from "../styles/styles";
 import { ScrollView } from "react-native-gesture-handler";
 import PageHeading from "./PageHeading";
+import MenuBar from "./MenuBar";
 
 interface TodoItemsListProps {
   id: string,
@@ -313,30 +314,12 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     </ScrollView>
 
     {menuBarOpen ?
-      <View style={menubar.main}>
-        <View style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 40,
-          alignItems: "center",
-          width: "100%"
-        }}>
-          <View style={menubar.container}>
-            <Icon name="edit" onPress={editTodo} size={30} color="grey" />
-            <Text style={menubar.text}>Edit</Text>
-          </View>
-          <View style={[menubar.container, {
-            marginLeft: 30
-          }]}>
-            <Icon name="delete-forever" onPress={deleteTodo} size={30} color="grey" />
-            <Text style={menubar.text}>Delete</Text>
-          </View>
-          <View style={menubar.container}>
-            <Icon name="bookmark" onPress={bookmarkTodo} size={30} color={isBookmarked ? "#1dd67a" : "grey"} />
-            <Text style={menubar.text}>{isBookmarked ? 'Bookmarked' : 'Bookmark'}</Text>
-          </View>
-        </View>
-      </View>
+      <MenuBar
+        isBookmarked={isBookmarked}
+        editTodo={editTodo}
+        deleteTodo={deleteTodo}
+        bookmarkTodo={bookmarkTodo}
+      />
     : null }
     </>
   )
