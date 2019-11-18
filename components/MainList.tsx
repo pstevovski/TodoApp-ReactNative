@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, SafeAreaView, FlatList, RefreshControl, Animated, Easing } from "react-native";
+import { View, Text, SafeAreaView, FlatList, RefreshControl, Animated, Easing, Dimensions } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
 
@@ -86,9 +86,9 @@ const MainList = (props: any) => {
         </View>
         
         <View style={{
-          padding: 10
+          padding: 10,
         }}>
-          <Text style={[text.sectionTitle, { marginBottom: 20}]}>Main List</Text>
+          <Text style={[text.sectionTitle, { marginBottom: 20}]}>Todo Lists</Text>
           {todoListsArray && todoListsArray.length > 0 ?
               searchText && searchText.length > 0 ?
                 todoListsArray.filter((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText)).map((item: any) => (

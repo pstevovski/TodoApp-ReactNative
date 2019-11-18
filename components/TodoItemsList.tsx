@@ -206,9 +206,11 @@ const TodoItemsList = (props: TodoItemsListProps) => {
           position: "absolute",
           top: 0,
           left: 0,
+          right: 0,
+          bottom: 0,
           backgroundColor: "#333",
           opacity: 0.5,
-          elevation: 12
+          elevation: 12,
         }}></View>
       : null}
 
@@ -219,6 +221,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         justifyContent: "space-between",
         alignContent: "center",
         width: "100%",
+        height: Dimensions.get("window").height
       }}>
         <View>
           <View style={{alignSelf: "center", padding: 20}}>
@@ -296,8 +299,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
             left: 0,
             right: 0,
             bottom: 0,
+            height: "100%",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}>
             <EditTodoModal 
               listId={props.id} 

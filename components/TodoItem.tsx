@@ -87,37 +87,6 @@ const TodoItem = (props: TodoItemProps) => {
           ]
         }]}
       />
-      {/* {props.completed ?
-        <Animated.View style={icons.itemIcons}>
-          <AnimatedIcon 
-          name="check-circle-outline" 
-          size={30} 
-          color="#1dd67a"
-          style={{
-            transform: [
-              {
-                scale: scaleIconDown
-              }
-            ]
-          }}
-        />
-        </Animated.View>
-      : 
-        <Animated.View style={icons.itemIcons}>
-          <AnimatedIcon 
-          name="close-circle-outline" 
-          size={30} 
-          color="#e1302a"
-          style={{
-            transform: [
-              {
-                scale: scaleIconUp
-              }
-            ]
-          }}
-        />
-        </Animated.View>
-      } */}
     </Animated.View>
   )
 }
