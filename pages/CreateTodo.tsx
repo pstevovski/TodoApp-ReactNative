@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Animated, Easing } from "react-native";
 import AsyncStorage, { useAsyncStorage } from "@react-native-community/async-storage";
 import { withNavigation } from "react-navigation";
 
 // Unique IDs generator
 import uuid from "uuid";
 import PageHeading from "../components/PageHeading";
+
+// Animated touchable opacity component
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 const CreateTodo = (props: any) => {
   // const [editState, setEditState] = useState(false);
@@ -140,9 +143,38 @@ const CreateTodo = (props: any) => {
     props.navigation.navigate("Home");
   }
 
+  const [buttonAnimation] = useState(new Animated.Value(0));
+  const tiggerButtonAction = (state: string, type: string) => {
+    // Reset animation value
+    buttonAnimation.setValue(0);
+
+    Animated.spring(buttonAnimation, {
+      toValue: 2,
+      useNativeDriver: true
+    }).start(() => {
+      // Call action after animation ends
+      if (state === "edit") {
+        editItem();
+      } else if (type === "item") {
+        addTodoToList();
+      } else {
+        saveList();
+      }
+    });
+  }
+
+  const buttonScale = buttonAnimation.interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: [1, 1.2, 1]
+  })
+
   return (
     <View>
-      <PageHeading id="" extraIcon={true} clearList={() => clearStorage()} />
+      <PageHeading 
+        id="" 
+        extraIcon={props.navigation.getParam("type") === "list" ? true : false} 
+        clearList={() => clearStorage()} 
+      />
 
       {/* List / Item title */}
       <View style={{
@@ -187,22 +219,29 @@ const CreateTodo = (props: any) => {
         margin: 20,
         alignItems: "center"
       }}>
-        <TouchableOpacity onPress={() => {
-          if (props.navigation.getParam("state") === "edit") {
-            editItem();
-          } else if (props.navigation.getParam("type") === "item") {
-            addTodoToList();
-          } else {
-            saveList();
-          }
-        }} style={{
+        <AnimatedTouchableOpacity onPress={() => {
+          tiggerButtonAction(props.navigation.getParam("state"), props.navigation.getParam("type"));
+          // if (props.navigation.getParam("state") === "edit") {
+          //   editItem();
+          // } else if (props.navigation.getParam("type") === "item") {
+          //   addTodoToList();
+          // } else {
+          //   saveList();
+          // }}
+        }}
+        style={{
           padding: 10,
           borderWidth: 1,
           borderColor: "#999",
           borderRadius: 25,
           width: 120,
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
+          transform: [
+            {
+              scale: buttonScale
+            }
+          ]
         }}>
           <View>
             {props.navigation.getParam("type") === "list" ?
@@ -211,7 +250,7 @@ const CreateTodo = (props: any) => {
               <Text>Add todo</Text>
             }
           </View>
-        </TouchableOpacity>
+        </AnimatedTouchableOpacity>
       </View>
     </View>
   )

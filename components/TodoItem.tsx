@@ -17,7 +17,33 @@ interface TodoItemProps {
   navigation: any
 }
 
+// Animated icon component
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+
 const TodoItem = (props: TodoItemProps) => {
+  const [iconAnimation] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    iconAnimation.setValue(0);
+
+    Animated.timing(iconAnimation, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.elastic(2),
+      useNativeDriver: true
+    }).start();
+  }, [])
+
+  const scaleIconUp = iconAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.8, 1.1]
+  })
+
+  const scaleIconDown = iconAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0.8]
+  })
+
 
   return (
     <Animated.View style={{
@@ -48,15 +74,50 @@ const TodoItem = (props: TodoItemProps) => {
 
       </TouchableOpacity>
 
-      {props.completed ?
+
+      <AnimatedIcon
+        name={`${props.completed ? 'check-circle-outline' : 'close-circle-outline'}`}
+        size={30}
+        color={`${props.completed ? "#1dd67a" : "#e1302a"}`}
+        style={[icons.itemIcons, {
+          transform: [
+            {
+              scale: props.completed ? scaleIconUp: scaleIconDown
+            }
+          ]
+        }]}
+      />
+      {/* {props.completed ?
         <Animated.View style={icons.itemIcons}>
-          <Icon name="check-circle-outline" size={30} color="#1dd67a" />
+          <AnimatedIcon 
+          name="check-circle-outline" 
+          size={30} 
+          color="#1dd67a"
+          style={{
+            transform: [
+              {
+                scale: scaleIconDown
+              }
+            ]
+          }}
+        />
         </Animated.View>
       : 
         <Animated.View style={icons.itemIcons}>
-          <Icon name="close-circle-outline" size={30} color="#e1302a" />
+          <AnimatedIcon 
+          name="close-circle-outline" 
+          size={30} 
+          color="#e1302a"
+          style={{
+            transform: [
+              {
+                scale: scaleIconUp
+              }
+            ]
+          }}
+        />
         </Animated.View>
-      }
+      } */}
     </Animated.View>
   )
 }

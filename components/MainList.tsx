@@ -64,27 +64,6 @@ const MainList = (props: any) => {
     setRefreshing(false);
   }
 
-  // Main screen animation
-  const [contentAnimation] = useState(new Animated.Value(0));
-  useEffect(() => {
-    // contentAnimation.setValue(0);
-
-    Animated.timing(contentAnimation, {
-      toValue: 1,
-      duration: 1000,
-      easing: Easing.ease,
-      useNativeDriver: true
-    }).start()
-  }, [])
-  const contentAnimationValueY = contentAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [250, 0]
-  })
-  const contentAnimationValueOpacity = contentAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1]
-  })
-
   return (
     <SafeAreaView>
       <ScrollView refreshControl={
@@ -106,14 +85,8 @@ const MainList = (props: any) => {
           })} />
         </View>
         
-        <Animated.View style={{
-          padding: 10,
-          opacity: contentAnimationValueOpacity,
-          transform: [
-            {
-              translateY: contentAnimationValueY
-            }
-          ]
+        <View style={{
+          padding: 10
         }}>
           <Text style={[text.sectionTitle, { marginBottom: 20}]}>Main List</Text>
           {todoListsArray && todoListsArray.length > 0 ?
@@ -175,7 +148,7 @@ const MainList = (props: any) => {
             ))
           : <Text style={text.p}>No bookmarks found.</Text>
           }
-        </Animated.View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
