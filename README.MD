@@ -21,7 +21,8 @@ Simple Todo App made in React Native.
   - [x] Add Bookmarking option
   - [x] Display Bookmarked todos on main page
   - [x] Bookmarked todos when clicked - link to their list / toggle completed / not completed.
-  - [ ] Option to remove bookmarked item from main screen
+  - [ ] Option to remove bookmarked item from the specific list where it exists
+  - [ ] Update the bookmarked item if the item itself was edited
 -----------------------------------------
 - [x] Styling
 - [ ] Editing todo performance issue
