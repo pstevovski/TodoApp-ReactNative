@@ -46,7 +46,7 @@ const CreateTodo = (props: any) => {
     return currentDate;
   }
 
-  // Save item to storage
+  // Save new list to storage
   const saveList = async () => {
     // Fields must be filled
     if (!title || !description) return;
@@ -59,6 +59,7 @@ const CreateTodo = (props: any) => {
       description,
       date: `Created: ${currentDateAndTime()}`,
       children: [],
+      bookmarked: [],
       listCompleted: false    
     })
 
