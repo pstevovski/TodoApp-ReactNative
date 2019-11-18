@@ -24,6 +24,8 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [menuBarOpen, setMenuBarOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  const [updatedList, setUpdatedList] = useState([]);
+
   // Get and Set items to bookmarks list
   const { getItem: getBookmarked, setItem: setBookmarked } = useAsyncStorage("@todoListBookmarks");
 
@@ -134,36 +136,70 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   // Mark todo item as favorite
   const bookmarkTodo = async () => {
-    const bookmarksList = await getBookmarked();
-    let bookmarks = [];
+    // Find list in which the selected todo is
+    // Push the selected todo in the current list bookmarks array
 
-    if (bookmarksList !== null) {
-      bookmarks = JSON.parse(bookmarksList);
-    } else {
-      bookmarks = [];
+    const currentLists = await getItem();
+
+    // Find opened list
+    if (currentLists) {
+      const lists = JSON.parse(currentLists);
+
+      const openedList = lists.filter((list: any) => list.id === props.id);
+      const openedListIndex = lists.findIndex((list: any) => list.id === props.id);
+
+      // Find the selected todo in the list
+      const selectedTodo = items.find((todo: any) => todo.todoID === itemID);
+
+      // Prevent same todo to be added to bookmarks multiple times, if already bookmarked, remove it
+      if (!openedList[0].bookmarked.find((bookmark: any) => bookmark.todoID === itemID)) {
+        openedList[0].bookmarked.push(selectedTodo);
+      } else {
+        const bookmarkedTodoIndex = openedList[0].bookmarked.findIndex((bookmark: any) => bookmark.todoID === itemID);
+        openedList[0].bookmarked.splice(bookmarkedTodoIndex, 1);
+        setIsBookmarked(false);
+      }
+
+      // // Save to storage
+      await setItem(JSON.stringify(lists));
+
+      // Close the menu bar
+      openMenu(itemID);
+
+      // Clear item ID
+      setItemID("");
     }
+    
+    // const bookmarksList = await getBookmarked();
+    // let bookmarks = [];
 
-    // Find todo in list
-    const findTodo = items.find((todo: any) => todo.todoID === itemID);
+    // if (bookmarksList !== null) {
+    //   bookmarks = JSON.parse(bookmarksList);
+    // } else {
+    //   bookmarks = [];
+    // }
 
-    // Prevent same todo to be added to bookmarks multiple times
-    if (!bookmarks.find((bookmark: any) => bookmark.todoID === itemID)) {
-      bookmarks.push(findTodo)
-    } else {
-      // Remove from bookmarks list if clicked on icon if item is already marked as favorite
-      const bookmarkedIndex = bookmarks.findIndex((bookmark: any) => bookmark.todoID === itemID);
-      bookmarks.splice(bookmarkedIndex, 1);
-      setIsBookmarked(false);
-    }
+    // // Find todo in list
+    // const findTodo = items.find((todo: any) => todo.todoID === itemID);
 
-    // Save to storage
-    await setBookmarked(JSON.stringify(bookmarks));
+    // // Prevent same todo to be added to bookmarks multiple times
+    // if (!bookmarks.find((bookmark: any) => bookmark.todoID === itemID)) {
+    //   bookmarks.push(findTodo)
+    // } else {
+    //   // Remove from bookmarks list if clicked on icon if item is already marked as favorite
+    //   const bookmarkedIndex = bookmarks.findIndex((bookmark: any) => bookmark.todoID === itemID);
+    //   bookmarks.splice(bookmarkedIndex, 1);
+    //   setIsBookmarked(false);
+    // }
 
-    // Close menu bar
-    openMenu(itemID);
+    // // Save to storage
+    // await setBookmarked(JSON.stringify(bookmarks));
 
-    // Clear item ID
-    setItemID("");
+    // // Close menu bar
+    // openMenu(itemID);
+
+    // // Clear item ID
+    // setItemID("");
   }
 
   // Edit todo

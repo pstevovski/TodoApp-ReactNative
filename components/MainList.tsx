@@ -18,7 +18,6 @@ const MainList = (props: any) => {
   const [searchText, setSearchText] = useState("");
   
   // Get bookmarked items
-  const { getItem: getBookmarked} = useAsyncStorage("@todoListBookmarks")
   const [bookmarkedArray, setBookmarkedArray] = useState([]);
 
   // Read saved items from local storage on any(??) update to the state
@@ -28,21 +27,16 @@ const MainList = (props: any) => {
 
   const readListFromStorage = async () => {
     const list = await getItem();
-    const bookmarksList = await getBookmarked();
 
     // Check if list exists
     if (list !== null) {
       setTodoListsArray(JSON.parse(list));
+      setBookmarkedArray(JSON.parse(list).map((list: any) => list.bookmarked));
     } else {
       setTodoListsArray([]);
     }
-
-    // Check if there are bookmarked todos
-    if (bookmarksList !== null) {
-      setBookmarkedArray(JSON.parse(bookmarksList));
-    } else {
-      setBookmarkedArray([]);
-    }
+    
+    console.log("LIST", list)
   }
 
   // Set the text to be used to filter the list out
@@ -62,6 +56,9 @@ const MainList = (props: any) => {
     await readListFromStorage();
 
     setRefreshing(false);
+
+    const test = bookmarkedArray.map((array: []) => array.map((item: any) => console.log("ITEM", item)))
+    // console.log("BOOKMARKS ARRAY", bookmarkedArray)
   }
 
   return (
@@ -135,17 +132,28 @@ const MainList = (props: any) => {
                                 date={item.date}
                               />
                             ))
-            : bookmarkedArray.map((item: any) => (
-              <BookmarkedItem
-                key={item.todoID}
-                id={item.todoID}
-                text={item.todo}
-                listID={item.todoListID}
-                listTitle={item.todoListTitle}
-                completed={item.completed}
-                date={item.date}
-              />
-            ))
+              : bookmarkedArray.map((array: []) => array.map((item: any) => (
+                <BookmarkedItem
+                  key={item.todoID}
+                  id={item.todoID}
+                  text={item.todo}
+                  listID={item.todoListID}
+                  listTitle={item.todoListTitle}
+                  completed={item.completed}
+                  date={item.date}
+                />
+              )))
+            // : bookmarkedArray.map((item: any, index: any) => (
+            //   <BookmarkedItem
+            //     key={item.todoID}
+            //     id={item.todoID}
+            //     text={item.todo}
+            //     listID={item.todoListID}
+            //     listTitle={item.todoListTitle}
+            //     completed={item.completed}
+            //     date={item.date}
+            //   />
+            // ))
           : <Text style={text.p}>No bookmarks found.</Text>
           }
         </View>
