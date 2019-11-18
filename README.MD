@@ -29,8 +29,8 @@ Simple Todo App made in React Native.
 - [x] Pull to reload:
   - [x] Main page
   - [x] Specific list 
-- [ ] Animations
-- [ ] Checkmark for completed todos styling / animation
+- [x] Animations
+- [x] Checkmark for completed todos styling / animation
 - [ ] Custom splash screen - native code
 - [ ] Custom icon - native code
 - [x] Page transitions
