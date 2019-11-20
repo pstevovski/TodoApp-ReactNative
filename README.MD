@@ -26,7 +26,8 @@ Simple Todo App made in React Native.
 -----------------------------------------
 - [x] Styling
 - [ ] Editing todo performance issue
-- [ ] Reload list on main page after item is bookmarked or new list is created/updated
+- [x] Reload list on main page after item is bookmarked or new list is created/updated
+- [ ] Reload main page lists after list is deleted
 - [x] Pull to reload:
   - [x] Main page
   - [x] Specific list 

@@ -20,9 +20,14 @@ const MainList = (props: any) => {
   // Get bookmarked items
   const [bookmarkedArray, setBookmarkedArray] = useState([]);
 
-  // Read saved items from local storage on any(??) update to the state
+  // Read saved items from local storage when app is opened
   useEffect(() => {
     readListFromStorage();
+
+    // Read saved items from local storage when going back to home page
+    props.navigation.addListener('willFocus', () => {
+      readListFromStorage();
+    })
   }, [])
 
   const readListFromStorage = async () => {
@@ -35,8 +40,6 @@ const MainList = (props: any) => {
     } else {
       setTodoListsArray([]);
     }
-    
-    console.log("LIST", list)
   }
 
   // Set the text to be used to filter the list out
