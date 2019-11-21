@@ -22,26 +22,42 @@ const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 const TodoItem = (props: TodoItemProps) => {
   const [iconAnimation] = useState(new Animated.Value(0));
+  const [iconRotationAnimation] = useState(new Animated.Value(0));
 
   useEffect(() => {
     iconAnimation.setValue(0);
 
-    Animated.timing(iconAnimation, {
-      toValue: 1,
-      duration: 500,
-      easing: Easing.elastic(2),
-      useNativeDriver: true
-    }).start();
+    // Run both animation parallel
+    Animated.parallel([
+      Animated.timing(iconAnimation, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.elastic(2),
+        useNativeDriver: true
+      }),
+      Animated.spring(iconRotationAnimation, {
+        toValue: 1,
+        useNativeDriver: true
+      })
+    ]).start();
   }, [])
 
   const scaleIconUp = iconAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [0.8, 1.1]
   })
+  const rotateIconCheck = iconRotationAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"]
+  })
 
   const scaleIconDown = iconAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [1, 0.8]
+  })
+  const rotateIconClose = iconRotationAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["360deg", "0deg"]
   })
 
 
@@ -83,6 +99,9 @@ const TodoItem = (props: TodoItemProps) => {
           transform: [
             {
               scale: props.completed ? scaleIconUp: scaleIconDown
+            },
+            {
+              rotate: props.completed ? rotateIconCheck : rotateIconClose
             }
           ]
         }]}
