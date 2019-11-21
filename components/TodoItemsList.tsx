@@ -39,7 +39,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     if (list !== null) {
       setItems(JSON.parse(list).find((list: any) => list.id === props.id).children);
     }
-
   }
 
   // Mark a todo as completed on long press
@@ -60,7 +59,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       }
 
       // If bookmarks exist on list, find specific item that is bookmarked and toggle completition
-      if (filteredList.bookmarked) {
+      if (filteredList.bookmarked[markedItemIndex] && filteredList.bookmarked.length > 0) {
         filteredList.bookmarked[markedItemIndex] = {
           ...filteredList.bookmarked[markedItemIndex],
           completed: !filteredList.bookmarked[markedItemIndex].completed
@@ -81,6 +80,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
       // Save to storage
       await setItem(JSON.stringify(listToBeSaved));
+
+      // Update the list
+      getListData();
     }
 
   }
