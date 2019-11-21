@@ -24,6 +24,7 @@ Simple Todo App made in React Native.
   - [x] Option to remove bookmarked item from the specific list where it exists
   - [x] Update the bookmarked item if the item itself was edited
   - [x] Toggle completed mode for bookmarked item as well
+  - [x] Display bookmarked items and filter all items on main page when searched
 -----------------------------------------
 - [x] Styling
 - [ ] Editing todo performance issue

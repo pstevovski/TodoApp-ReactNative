@@ -18,7 +18,7 @@ const MainList = (props: any) => {
   const [searchText, setSearchText] = useState("");
   
   // Get bookmarked items
-  const [bookmarkedArray, setBookmarkedArray] = useState([]);
+  const [bookmarkedArray, setBookmarkedArray] = useState([] as any);
 
   // Read saved items from local storage when app is opened
   useEffect(() => {
@@ -35,8 +35,13 @@ const MainList = (props: any) => {
 
     // Check if list exists
     if (list !== null) {
-      setTodoListsArray(JSON.parse(list));
-      setBookmarkedArray(JSON.parse(list).map((list: any) => list.bookmarked));
+      const parsedList = JSON.parse(list);
+      let flatt: Object[] = [];
+      parsedList.map((list: any) => flatt.push(...list.bookmarked));
+
+      setTodoListsArray(parsedList);
+      setBookmarkedArray(flatt);
+
     } else {
       setTodoListsArray([]);
     }
@@ -60,8 +65,7 @@ const MainList = (props: any) => {
 
     setRefreshing(false);
 
-    const test = bookmarkedArray.map((array: []) => array.map((item: any) => console.log("ITEM", item)))
-    // console.log("BOOKMARKS ARRAY", bookmarkedArray)
+    console.log("BOOKMARKED ARRAY", bookmarkedArray);
   }
 
   return (
@@ -121,43 +125,34 @@ const MainList = (props: any) => {
             <Text style={text.sectionTitle}>BOOKMARKS</Text>
             <Icon name="bookmark" size={25} color="#1dd67a" style={{paddingLeft: 10}} />
           </View>
-          {bookmarkedArray && bookmarkedArray.length > 0 ?
-            searchText && searchText.length > 0 ?
-              bookmarkedArray.filter((bookmark: any) => bookmark.todo.toLowerCase().includes(searchText))
-                            .map((item: any) => (
-                              <BookmarkedItem
-                                key={item.todoID}
-                                id={item.todoID}
-                                text={item.todo}
-                                listID={item.todoListID}
-                                listTitle={item.todoListTitle}
-                                completed={item.completed}
-                                date={item.date}
-                              />
-                            ))
-              : bookmarkedArray.map((array: []) => array.map((item: any) => (
-                <BookmarkedItem
-                  key={item.todoID}
-                  id={item.todoID}
-                  text={item.todo}
-                  listID={item.todoListID}
-                  listTitle={item.todoListTitle}
-                  completed={item.completed}
-                  date={item.date}
-                />
-              )))
-            // : bookmarkedArray.map((item: any, index: any) => (
-            //   <BookmarkedItem
-            //     key={item.todoID}
-            //     id={item.todoID}
-            //     text={item.todo}
-            //     listID={item.todoListID}
-            //     listTitle={item.todoListTitle}
-            //     completed={item.completed}
-            //     date={item.date}
-            //   />
-            // ))
-          : <Text style={text.p}>No bookmarks found.</Text>
+          {
+            bookmarkedArray && bookmarkedArray.length > 0 ? 
+              searchText && searchText.length > 0 ?
+                bookmarkedArray.filter((bookmark: any) => bookmark.todo.toLowerCase().includes(searchText))
+                  .map((item: any) => (
+                    <BookmarkedItem 
+                      key={item.todoID}
+                      id={item.todoID}
+                      text={item.todo}
+                      listID={item.todoListID}
+                      listTitle={item.todoListTitle}
+                      completed={item.completed}
+                      date={item.date}
+                    />
+                  ))
+              :
+                bookmarkedArray.map((item: any) => (
+                  <BookmarkedItem 
+                    key={item.todoID}
+                    id={item.todoID}
+                    text={item.todo}
+                    listID={item.todoListID}
+                    listTitle={item.todoListTitle}
+                    completed={item.completed}
+                    date={item.date}
+                  />
+                ))
+            : <Text style={text.p}>No bookmarks found.</Text>          
           }
         </View>
       </ScrollView>
