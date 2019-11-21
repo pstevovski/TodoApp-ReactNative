@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Dimensions, TouchableOpacity, Platform, RefreshControl } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity, Platform, RefreshControl, CheckBox } from "react-native";
 import TodoItem from "./TodoItem";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { withNavigation } from "react-navigation";
@@ -24,11 +24,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
   const [menuBarOpen, setMenuBarOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  const [updatedList, setUpdatedList] = useState([]);
-
-  // Get and Set items to bookmarks list
-  const { getItem: getBookmarked, setItem: setBookmarked } = useAsyncStorage("@todoListBookmarks");
-
   useEffect(() => {
     getListData();
   });
@@ -52,11 +47,19 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       // Find the list and its index that contains the marked todo
       const filteredList = JSON.parse(lists).find((list: any) => list.id === props.id);
       const filteredListIndex = JSON.parse(lists).findIndex((list: any) => list.id === props.id);
-      
+
       // Mark the todo item as completed
       filteredList.children[markedItemIndex] = {
         ...filteredList.children[markedItemIndex],
         completed: !filteredList.children[markedItemIndex].completed
+      }
+
+      // If bookmarks exist on list, find specific item that is bookmarked and toggle completition
+      if (filteredList.bookmarked) {
+        filteredList.bookmarked[markedItemIndex] = {
+          ...filteredList.bookmarked[markedItemIndex],
+          completed: !filteredList.bookmarked[markedItemIndex].completed
+        }
       }
 
       // Update the lists
@@ -91,11 +94,12 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     // Save the id of the item to state
     setItemID(id);
 
-    // Check if item is marked as favorite
-    const bookmarks = await getBookmarked();
-    if (bookmarks) {
-      const checkIfBookmarkExists = JSON.parse(bookmarks).find((fav: any) => fav.todoID === id);
-        
+    // Check if item is bookmarked
+    const bookmarks = await getItem();
+    if (bookmarks) { 
+      const bookmarksList = JSON.parse(bookmarks).find((list: any) => list.id === props.id).bookmarked;
+      const checkIfBookmarkExists = bookmarksList.find((bookmark: any) => bookmark.todoID === id);
+
       if (checkIfBookmarkExists) {
         setIsBookmarked(true);
       } else {
@@ -109,16 +113,21 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   // Delete pressed todo item
   const deleteTodo = async () => {
-    const deltedTodoIndex = items.findIndex((todo: any) => todo.todoID === itemID);
+    const deletedTodoIndex = items.findIndex((todo: any) => todo.todoID === itemID);
     const savedLists = await getItem();
 
     if (savedLists) {
       const listsAfterTodoIsDeleted = JSON.parse(savedLists);
       let specificList = listsAfterTodoIsDeleted.find((list: any) => list.id === props.id);
       const listIndex  = listsAfterTodoIsDeleted.findIndex((list: any) => list.id === props.id);
-      
+
       // Remove todo element from the specific list
-      specificList.children.splice(deltedTodoIndex, 1);    
+      specificList.children.splice(deletedTodoIndex, 1);    
+
+      // Remove todo element from bookmarked
+      if (specificList.bookmarked) {
+        specificList.bookmarked.splice(deletedTodoIndex, 1);
+      }
 
       // Update the array containing all created lists
       listsAfterTodoIsDeleted.splice(listIndex, 1, specificList);
@@ -136,9 +145,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   // Mark todo item as favorite
   const bookmarkTodo = async () => {
-    // Find list in which the selected todo is
-    // Push the selected todo in the current list bookmarks array
-
     const currentLists = await getItem();
 
     // Find opened list
@@ -169,37 +175,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       // Clear item ID
       setItemID("");
     }
-    
-    // const bookmarksList = await getBookmarked();
-    // let bookmarks = [];
-
-    // if (bookmarksList !== null) {
-    //   bookmarks = JSON.parse(bookmarksList);
-    // } else {
-    //   bookmarks = [];
-    // }
-
-    // // Find todo in list
-    // const findTodo = items.find((todo: any) => todo.todoID === itemID);
-
-    // // Prevent same todo to be added to bookmarks multiple times
-    // if (!bookmarks.find((bookmark: any) => bookmark.todoID === itemID)) {
-    //   bookmarks.push(findTodo)
-    // } else {
-    //   // Remove from bookmarks list if clicked on icon if item is already marked as favorite
-    //   const bookmarkedIndex = bookmarks.findIndex((bookmark: any) => bookmark.todoID === itemID);
-    //   bookmarks.splice(bookmarkedIndex, 1);
-    //   setIsBookmarked(false);
-    // }
-
-    // // Save to storage
-    // await setBookmarked(JSON.stringify(bookmarks));
-
-    // // Close menu bar
-    // openMenu(itemID);
-
-    // // Clear item ID
-    // setItemID("");
   }
 
   // Edit todo

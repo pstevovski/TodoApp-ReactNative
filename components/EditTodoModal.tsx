@@ -31,6 +31,14 @@ const EditTodoModal = (props: EditTodoModalProps) => {
         todo: editTodoInput,
       })
 
+      // Update the bookmarked item of a specific list when updating the todo
+      if (specificList.bookmarked) {
+        specificList.bookmarked.splice(todoIndex, 1, {
+          ...specificList.bookmarked[todoIndex],
+          todo: editTodoInput
+        })
+      }
+
       // Update the whole list and save to storage
       parsedList.splice(specificListIndex, 1, specificList);
 
