@@ -18,7 +18,7 @@ const MainList = (props: any) => {
   const [searchText, setSearchText] = useState("");
   
   // Get bookmarked items
-  const [bookmarkedArray, setBookmarkedArray] = useState([] as any);
+  const [bookmarkedArray, setBookmarkedArray] = useState([] as Object[]);
 
   // Read saved items from local storage when app is opened
   useEffect(() => {

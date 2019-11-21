@@ -26,7 +26,12 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
   useEffect(() => {
     getListData();
-  });
+
+    // Read saved items from local storage when going back to home page
+    props.navigation.addListener('willFocus', () => {
+      getListData();
+    })
+  }, []);
 
   const getListData = async() => {
     const list = await getItem();
