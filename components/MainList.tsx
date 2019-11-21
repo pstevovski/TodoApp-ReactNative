@@ -95,16 +95,22 @@ const MainList = (props: any) => {
           <Text style={[text.sectionTitle, { marginBottom: 20}]}>Todo Lists</Text>
           {todoListsArray && todoListsArray.length > 0 ?
               searchText && searchText.length > 0 ?
-                todoListsArray.filter((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText)).map((item: any) => (
-                  <TodoList
-                    key={item.id}
-                    id={item.id}
-                    title={item.title}
-                    description={item.description}
-                    date={item.date}
-                    completed={item.listCompleted}
-                  />
-                ))
+                // Check if searched item / list exists
+                Boolean(todoListsArray.find((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText))) ?
+                  // If it exists - filter only the resulst that match the search text
+                  todoListsArray.filter((list: any) => list.title.toLowerCase().includes(searchText) || list.description.toLowerCase().includes(searchText)).map((item: any) => (
+                    <TodoList
+                      key={item.id}
+                      id={item.id}
+                      title={item.title}
+                      description={item.description}
+                      date={item.date}
+                      completed={item.listCompleted}
+                    />
+                  ))
+                // If it doesnt exist - display message
+                : <Text style={[text.p, { marginBottom: 20}]}>No such list was found</Text>
+
               : todoListsArray.map((item: any) => (
                 <TodoList
                   key={item.id}
@@ -115,7 +121,8 @@ const MainList = (props: any) => {
                   completed={item.listCompleted}
                 />
               ))
-          : <Text style={text.p}>No lists found.</Text>}
+          : <Text style={[text.p, { marginBottom: 20}]}>No lists found.</Text>
+          }
 
           <View style={{
             marginBottom: 20,
@@ -128,6 +135,7 @@ const MainList = (props: any) => {
           {
             bookmarkedArray && bookmarkedArray.length > 0 ? 
               searchText && searchText.length > 0 ?
+                Boolean(bookmarkedArray.find((bookmark: any) => bookmark.todo.toLowerCase().includes(searchText))) ?
                 bookmarkedArray.filter((bookmark: any) => bookmark.todo.toLowerCase().includes(searchText))
                   .map((item: any) => (
                     <BookmarkedItem 
@@ -140,6 +148,7 @@ const MainList = (props: any) => {
                       date={item.date}
                     />
                   ))
+                : <Text style={[text.p, { marginBottom: 20}]}>No such bookmark found.</Text>
               :
                 bookmarkedArray.map((item: any) => (
                   <BookmarkedItem 
@@ -152,7 +161,7 @@ const MainList = (props: any) => {
                     date={item.date}
                   />
                 ))
-            : <Text style={text.p}>No bookmarks found.</Text>          
+            : <Text style={[text.p, { marginBottom: 20}]}>No bookmarks found.</Text>          
           }
         </View>
       </ScrollView>

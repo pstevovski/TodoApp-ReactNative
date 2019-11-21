@@ -39,6 +39,6 @@ Simple Todo App made in React Native.
 - [ ] Custom icon - native code
 - [x] Page transitions
 - [x] Sort completed todos in a list to show on top
- - [ ] Hide Completed/Not Completed text when filtering todos trough the search bar
+- [x] Hide Completed/Not Completed text when filtering todos trough the search bar and display message if nothing has been found
 -----------------------------------------
 
