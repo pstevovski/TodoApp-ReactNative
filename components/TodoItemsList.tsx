@@ -49,8 +49,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
     if (lists !== null) {
       // Find the list and its index that contains the marked todo
-      const filteredList = JSON.parse(lists).find((list: any) => list.id === props.id);
-      const filteredListIndex = JSON.parse(lists).findIndex((list: any) => list.id === props.id);
+      const parsedList = JSON.parse(lists);
+      const filteredList = parsedList.find((list: any) => list.id === props.id);
+      const filteredListIndex = parsedList.findIndex((list: any) => list.id === props.id);
 
       // Mark the todo item as completed
       filteredList.children[markedItemIndex] = {
@@ -58,11 +59,11 @@ const TodoItemsList = (props: TodoItemsListProps) => {
         completed: !filteredList.children[markedItemIndex].completed
       }
 
-      // If bookmarks exist on list, find specific item that is bookmarked and toggle completition
-      if (filteredList.bookmarked[markedItemIndex] && filteredList.bookmarked.length > 0) {
-        filteredList.bookmarked[markedItemIndex] = {
-          ...filteredList.bookmarked[markedItemIndex],
-          completed: !filteredList.bookmarked[markedItemIndex].completed
+      const bookmarkedItemIndex = filteredList.bookmarked.findIndex((bookmark: any) => bookmark.todoID === id);
+      if (filteredList.bookmarked[bookmarkedItemIndex]) {
+        filteredList.bookmarked[bookmarkedItemIndex] = {
+          ...filteredList.bookmarked[bookmarkedItemIndex],
+          completed: !filteredList.bookmarked[bookmarkedItemIndex].completed
         }
       }
 
@@ -132,8 +133,9 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       specificList.children.splice(deletedTodoIndex, 1);    
 
       // Remove todo element from bookmarked
+      const deletedBookmarkedTodoIndex = specificList.bookmarked.findIndex((todo: any) => todo.todoID === itemID);
       if (specificList.bookmarked) {
-        specificList.bookmarked.splice(deletedTodoIndex, 1);
+        specificList.bookmarked.splice(deletedBookmarkedTodoIndex, 1);
       }
 
       // Update the array containing all created lists
@@ -158,18 +160,18 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     if (currentLists) {
       const lists = JSON.parse(currentLists);
 
-      const openedList = lists.filter((list: any) => list.id === props.id);
-      const openedListIndex = lists.findIndex((list: any) => list.id === props.id);
+      const filteredList = lists.filter((list: any) => list.id === props.id);
+      const filteredListIndex = lists.findIndex((list: any) => list.id === props.id);
 
       // Find the selected todo in the list
       const selectedTodo = items.find((todo: any) => todo.todoID === itemID);
 
       // Prevent same todo to be added to bookmarks multiple times, if already bookmarked, remove it
-      if (!openedList[0].bookmarked.find((bookmark: any) => bookmark.todoID === itemID)) {
-        openedList[0].bookmarked.push(selectedTodo);
+      if (!filteredList[0].bookmarked.find((bookmark: any) => bookmark.todoID === itemID)) {
+        filteredList[0].bookmarked.push(selectedTodo);
       } else {
-        const bookmarkedTodoIndex = openedList[0].bookmarked.findIndex((bookmark: any) => bookmark.todoID === itemID);
-        openedList[0].bookmarked.splice(bookmarkedTodoIndex, 1);
+        const bookmarkedTodoIndex = filteredList[0].bookmarked.findIndex((bookmark: any) => bookmark.todoID === itemID);
+        filteredList[0].bookmarked.splice(bookmarkedTodoIndex, 1);
         setIsBookmarked(false);
       }
 
@@ -338,15 +340,13 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       </View>
     </ScrollView>
 
-    {/* {menuBarOpen ? */}
-      <MenuBar
-        isBookmarked={isBookmarked}
-        editTodo={editTodo}
-        deleteTodo={deleteTodo}
-        bookmarkTodo={bookmarkTodo}
-        menuOpen={menuBarOpen}
-      />
-    {/* // : null } */}
+    <MenuBar
+      isBookmarked={isBookmarked}
+      editTodo={editTodo}
+      deleteTodo={deleteTodo}
+      bookmarkTodo={bookmarkTodo}
+      menuOpen={menuBarOpen}
+    />
     </>
   )
 }

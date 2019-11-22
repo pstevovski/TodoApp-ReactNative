@@ -79,7 +79,7 @@ const MenuBar = (props: MenuBarProps) => {
           </View>
           <View style={menubar.container}>
             <Icon name="bookmark" onPress={props.bookmarkTodo} size={30} color={props.isBookmarked ? "#1dd67a" : "grey"} />
-            <Text style={menubar.text}>{props.isBookmarked ? 'Bookmarked' : 'Bookmark'}</Text>
+            <Text style={menubar.text}>Bookmark</Text>
           </View>
         </View>
       </Animated.View>
