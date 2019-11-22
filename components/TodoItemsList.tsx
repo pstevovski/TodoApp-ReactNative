@@ -331,20 +331,22 @@ const TodoItemsList = (props: TodoItemsListProps) => {
                 setIsEditing(false);
                 setEditingTodoValue("");
               }}
+              updateList={() => getListData()}
             />
           </View>
         : null}
       </View>
     </ScrollView>
 
-    {menuBarOpen ?
+    {/* {menuBarOpen ? */}
       <MenuBar
         isBookmarked={isBookmarked}
         editTodo={editTodo}
         deleteTodo={deleteTodo}
         bookmarkTodo={bookmarkTodo}
+        menuOpen={menuBarOpen}
       />
-    : null }
+    {/* // : null } */}
     </>
   )
 }
