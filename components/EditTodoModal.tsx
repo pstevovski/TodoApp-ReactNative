@@ -10,6 +10,7 @@ interface EditTodoModalProps {
   todoId: string,
   todo: string
   closeModal: () => void;
+  updateList: () => void;
 }
 
 const EditTodoModal = (props: EditTodoModalProps) => {
@@ -20,7 +21,6 @@ const EditTodoModal = (props: EditTodoModalProps) => {
   const editTodo = async () => {
     // Close keyboard
     Keyboard.dismiss();
-    console.log("KEYBOARD DISMISSED")
 
     const list = await getItem();
     if (list) {
@@ -51,9 +51,11 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       // Save to storage
       await setItem(JSON.stringify(parsedList));
       
-
       // Close the modal
       props.closeModal();
+
+      // Update and reload the list
+      props.updateList();
     }
   }
 
