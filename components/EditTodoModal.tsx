@@ -30,6 +30,7 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       const specificList = parsedList.find((list: any) => list.id === props.listId);
       const specificListIndex = parsedList.findIndex((list: any) => list.id === props.listId);
       const todoIndex = specificList.children.findIndex((todo: any) => todo.todoID === props.todoId)
+      const bookmarkedIndex = specificList.bookmarked.findIndex((bookmark: any) => bookmark.todoID === props.todoId);
 
       // Update the children of specific list
       specificList.children.splice(todoIndex, 1, {
@@ -40,7 +41,7 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       // Update the bookmarked item of a specific list when updating the todo
       if (specificList.bookmarked) {
         specificList.bookmarked.splice(todoIndex, 1, {
-          ...specificList.bookmarked[todoIndex],
+          ...specificList.bookmarked[bookmarkedIndex],
           todo: editTodoInput
         })
       }

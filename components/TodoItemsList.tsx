@@ -18,11 +18,13 @@ interface TodoItemsListProps {
 
 const TodoItemsList = (props: TodoItemsListProps) => {
   const { getItem, setItem } = useAsyncStorage("@todoList");
-  const [items, setItems] = useState([]);
+  const [currentList, setCurrentList] = useState([] as any);
   const [searchText, setSearchText] = useState("");
   const [itemID, setItemID] = useState(String);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingTodoValue, setEditingTodoValue] = useState("");
 
   useEffect(() => {
     getListData();
@@ -37,57 +39,126 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     const list = await getItem();
 
     if (list !== null) {
-      setItems(JSON.parse(list).find((list: any) => list.id === props.id).children);
+      setCurrentList(JSON.parse(list).find((list: any) => list.id === props.id));
+
+      console.log("CURRENT LIST", currentList);
+    } else {
+      setCurrentList([]);
     }
+  }
+
+  const getDataFromList = async() => {
+    const todoItemIndex = currentList.children.findIndex((todo: any) => todo.todoID === itemID);
+    const bookmarkedItemIndex = currentList.bookmarked.findIndex((todo: any) => todo.todoID === itemID);
+    const selectedItem = currentList.children.find((item: any) => item.todoID === itemID);
+    const currentListIndex = currentList.findIndex((list: any) => list.id === props.id);
+
+    return {
+      todoItemIndex,
+      bookmarkedItemIndex,
+      selectedItem,
+      currentListIndex
+    }
+  }
+
+  const updateCurrentList = async (action: string) => {
+    // Make a copy of the list
+    const listToBeUpdated = [...currentList];
+    const { currentListIndex } = await getDataFromList();
+
+    switch (true) {
+      case action === "MARK_COMPLETE":
+        const checkIfEveryTodoIsCompleted = currentList.children.every((item: any) => item.completed)
+        if (checkIfEveryTodoIsCompleted) {
+          listToBeUpdated[currentListIndex].listCompleted = true;
+        } else {
+          listToBeUpdated[currentListIndex].listCompleted = false;
+        }
+        break;
+      case action === "BOOKMARK_TODO":
+        break;
+      case action === "EDIT_TODO":
+        break;
+      case action === "DELETE_TODO":
+        // do nothing
+        break;
+    }
+
+    // Save updated list to storage
+    await setItem(JSON.stringify(listToBeUpdated));
+
+    // Close the menubar
+    openMenu("");
+
+    // Clear item ID
+    setItemID("");
+
+    // Reload the now updated list
+    getListData();
   }
 
   // Mark a todo as completed on long press
   const markAsComplete = async (id: string) => {
-    // Get saved list and find pressed todo
-    const lists = await getItem();
-    const markedItemIndex = items.findIndex((item: any) => item.todoID === id);
+    const { todoItemIndex, bookmarkedItemIndex } = await getDataFromList();
 
-    if (lists !== null) {
-      // Find the list and its index that contains the marked todo
-      const parsedList = JSON.parse(lists);
-      const filteredList = parsedList.find((list: any) => list.id === props.id);
-      const filteredListIndex = parsedList.findIndex((list: any) => list.id === props.id);
-
-      // Mark the todo item as completed
-      filteredList.children[markedItemIndex] = {
-        ...filteredList.children[markedItemIndex],
-        completed: !filteredList.children[markedItemIndex].completed
-      }
-
-      const bookmarkedItemIndex = filteredList.bookmarked.findIndex((bookmark: any) => bookmark.todoID === id);
-      if (filteredList.bookmarked[bookmarkedItemIndex]) {
-        filteredList.bookmarked[bookmarkedItemIndex] = {
-          ...filteredList.bookmarked[bookmarkedItemIndex],
-          completed: !filteredList.bookmarked[bookmarkedItemIndex].completed
-        }
-      }
-
-      // Update the lists
-      const listToBeSaved = JSON.parse(lists);
-      listToBeSaved.splice(filteredListIndex, 1, filteredList);
-
-      // Mark list as completed if every todo inside is completed
-      const checkIfEveryTodoIsCompleted = filteredList.children.every((item: any) => item.completed)
-      if (checkIfEveryTodoIsCompleted) {
-        listToBeSaved[filteredListIndex].listCompleted = true;
-      } else {
-        listToBeSaved[filteredListIndex].listCompleted = false;
-      }
-
-      // Save to storage
-      await setItem(JSON.stringify(listToBeSaved));
-
-      // Update the list
-      getListData();
+    // Mark the todo item as completed
+    currentList.children[todoItemIndex] = {
+      ...currentList.children[todoItemIndex],
+      completed: !currentList.children[todoItemIndex].completed
     }
 
+    // Update the bookmarked todo when the todo itself is updated (completed / not completed)
+    if (currentList.bookmarked[bookmarkedItemIndex]) {
+      currentList.bookmarked[bookmarkedItemIndex] = {
+        ...currentList.bookmarked[bookmarkedItemIndex],
+        completed: !currentList.bookmarked[bookmarkedItemIndex].completed
+      }
+    }
+
+    updateCurrentList("MARK_COMPLETE");
   }
 
+  // Bookmark todo item
+  const bookmarkTodo = async() => {
+    const { bookmarkedItemIndex, selectedItem } = await getDataFromList();
+
+    // Prevent same todo to be added to bookmarks multiple times, if already bookmarked, remove it
+    if (!currentList[0].bookmarked.find((bookmark: any) => bookmark.todoID === itemID)) {
+      currentList[0].bookmarked.push(selectedItem);
+    } else {
+      currentList[0].bookmarked.splice(bookmarkedItemIndex, 1);
+      setIsBookmarked(false);
+    }
+
+    updateCurrentList("BOOKMARK_TODO");
+  }
+
+  // Delete item
+  const deleteItem = async() => {
+    const { todoItemIndex, bookmarkedItemIndex, currentListIndex } = await getDataFromList();
+    // Remove todo element from the specific list
+    currentList.children.splice(todoItemIndex, 1);    
+
+    // Remove todo element from bookmarked
+    if (currentList.bookmarked) {
+      currentList.bookmarked.splice(bookmarkedItemIndex, 1);
+    }
+
+    // Update the array containing all created lists
+    currentList.splice(currentListIndex, 1, currentList);
+  }
+
+  // Edit specific todo
+  const editTodo = async () => {
+    const { todoItemIndex } = await getDataFromList();
+    const specificTodo = currentList.children[todoItemIndex];
+
+    setIsEditing(true);
+    setEditingTodoValue(specificTodo.todo);
+
+    openMenu("");
+  }
+  
   // Set the text to be used to filter the list out
   const searchTodos = (searchText: string) => {
     if (searchText !== "") {
@@ -119,88 +190,6 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     setMenuBarOpen(!menuBarOpen);
   }
 
-  // Delete pressed todo item
-  const deleteTodo = async () => {
-    const deletedTodoIndex = items.findIndex((todo: any) => todo.todoID === itemID);
-    const savedLists = await getItem();
-
-    if (savedLists) {
-      const listsAfterTodoIsDeleted = JSON.parse(savedLists);
-      let specificList = listsAfterTodoIsDeleted.find((list: any) => list.id === props.id);
-      const listIndex  = listsAfterTodoIsDeleted.findIndex((list: any) => list.id === props.id);
-
-      // Remove todo element from the specific list
-      specificList.children.splice(deletedTodoIndex, 1);    
-
-      // Remove todo element from bookmarked
-      const deletedBookmarkedTodoIndex = specificList.bookmarked.findIndex((todo: any) => todo.todoID === itemID);
-      if (specificList.bookmarked) {
-        specificList.bookmarked.splice(deletedBookmarkedTodoIndex, 1);
-      }
-
-      // Update the array containing all created lists
-      listsAfterTodoIsDeleted.splice(listIndex, 1, specificList);
-
-      // Save updated list to storage
-      await setItem(JSON.stringify(listsAfterTodoIsDeleted))
-    }
-
-    // Close the menubar
-    openMenu(itemID);
-
-    // Clear item ID
-    setItemID("");
-  }
-
-  // Mark todo item as favorite
-  const bookmarkTodo = async () => {
-    const currentLists = await getItem();
-
-    // Find opened list
-    if (currentLists) {
-      const lists = JSON.parse(currentLists);
-
-      const filteredList = lists.filter((list: any) => list.id === props.id);
-      const filteredListIndex = lists.findIndex((list: any) => list.id === props.id);
-
-      // Find the selected todo in the list
-      const selectedTodo = items.find((todo: any) => todo.todoID === itemID);
-
-      // Prevent same todo to be added to bookmarks multiple times, if already bookmarked, remove it
-      if (!filteredList[0].bookmarked.find((bookmark: any) => bookmark.todoID === itemID)) {
-        filteredList[0].bookmarked.push(selectedTodo);
-      } else {
-        const bookmarkedTodoIndex = filteredList[0].bookmarked.findIndex((bookmark: any) => bookmark.todoID === itemID);
-        filteredList[0].bookmarked.splice(bookmarkedTodoIndex, 1);
-        setIsBookmarked(false);
-      }
-
-      // // Save to storage
-      await setItem(JSON.stringify(lists));
-
-      // Close the menu bar
-      openMenu(itemID);
-
-      // Clear item ID
-      setItemID("");
-    }
-  }
-
-  // Edit todo
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingTodoValue, setEditingTodoValue] = useState("");
-  const editTodo = () => {
-    // Find the index of the todo
-    const findTodoIndex: number = items.findIndex((todo: any) => todo.todoID === itemID);
-    const todo: any = items[findTodoIndex];
-
-    // Set editing mode and send todo value to editing modal
-    setIsEditing(true);
-    setEditingTodoValue(todo.todo);
-
-    openMenu(itemID);
-  }
-
   // Reload page on pull
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
@@ -209,6 +198,8 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     await getListData();
 
     setRefreshing(false);
+
+    console.log("CURRENT LIST CHILDREN", currentList.children.some((item: any) => !item.completed));
   }
 
   return (
@@ -252,10 +243,10 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
           {/* COMPLETED ITEMS */}
           <View style={{paddingHorizontal: 20, paddingVertical: 10}}>
-            {items.some((item: any) => item.completed) ? <Text style={[text.sectionTitle, { marginBottom: 20}]}>COMPLETED</Text> : null}
-            { items ?
+            {/* {currentList.children.some((item: any) => item.completed) ? <Text style={[text.sectionTitle, { marginBottom: 20}]}>COMPLETED</Text> : null} */}
+            { currentList.children ?
                 searchText && searchText.length > 0 ?
-                  items.filter((item: any) => item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+                  currentList.children.filter((item: any) => item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
                     <TodoItem
                       key={item.todoID}
                       todo={item.todo}
@@ -266,7 +257,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
                       openMenu={openMenu}
                     />
                   ))
-                : items.filter((item: any) => item.completed).map((item: any) => (
+                : currentList.children.filter((item: any) => item.completed).map((item: any) => (
                   <TodoItem
                     key={item.todoID}
                     todo={item.todo}
@@ -281,11 +272,11 @@ const TodoItemsList = (props: TodoItemsListProps) => {
 
             <View>
               {/* NOT COMPLETED ITEMS */}
-              {items.some((item: any) => !item.completed) ? <Text style={[text.sectionTitle, { marginBottom: 20}]}>NOT COMPLETED</Text> : null}
+              {/* {currentList.children.some((item: any) => !item.completed) ? <Text style={[text.sectionTitle, { marginBottom: 20}]}>NOT COMPLETED</Text> : null} */}
 
-              { items ?
+              { currentList.children ?
                   searchText && searchText.length > 0 ?
-                    items.filter((item: any) => !item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
+                    currentList.children.filter((item: any) => !item.completed && item.todo.toLowerCase().includes(searchText)).map((item: any) => (
                       <TodoItem
                         key={item.todoID}
                         todo={item.todo}
@@ -296,7 +287,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
                         openMenu={openMenu}
                       />
                     ))
-                : items.filter((item: any) => !item.completed).map((item: any) => (
+                : currentList.children.filter((item: any) => !item.completed).map((item: any) => (
                   <TodoItem
                     key={item.todoID}
                     todo={item.todo}
@@ -343,7 +334,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
     <MenuBar
       isBookmarked={isBookmarked}
       editTodo={editTodo}
-      deleteTodo={deleteTodo}
+      deleteTodo={deleteItem}
       bookmarkTodo={bookmarkTodo}
       menuOpen={menuBarOpen}
     />
