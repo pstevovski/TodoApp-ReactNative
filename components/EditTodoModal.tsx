@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Keyboard } from "react-native";
 import { useAsyncStorage } from "@react-native-community/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { buttons, text } from "../styles/styles";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface EditTodoModalProps {
   listId: string,
@@ -17,8 +18,13 @@ const EditTodoModal = (props: EditTodoModalProps) => {
   const { getItem, setItem } = useAsyncStorage("@todoList");
 
   const editTodo = async () => {
+    // Close keyboard
+    Keyboard.dismiss();
+    console.log("KEYBOARD DISMISSED")
+
     const list = await getItem();
     if (list) {
+
       // Get list from storage and find specific list and todo to be edited
       const parsedList = JSON.parse(list);
       const specificList = parsedList.find((list: any) => list.id === props.listId);
@@ -44,6 +50,7 @@ const EditTodoModal = (props: EditTodoModalProps) => {
 
       // Save to storage
       await setItem(JSON.stringify(parsedList));
+      
 
       // Close the modal
       props.closeModal();
@@ -60,38 +67,37 @@ const EditTodoModal = (props: EditTodoModalProps) => {
       backgroundColor: "#fff",
       borderWidth: 0,
       padding: 10,
-      elevation: 13,
+      elevation: 15,
       borderRadius: 10,
-      
     }}>
-      <Text style={[text.pBig, text.title, { maxWidth: 250}]}>EDITING: {props.todo}</Text>
+        <Text style={[text.pBig, text.title, { maxWidth: "100%", textAlign: "center"}]}>EDITING: {props.todo}</Text>
 
-      <TextInput 
-        value={editTodoInput} 
-        onChangeText={(edit: string) => setEditTodoInput(edit)}
-        autoFocus={true}
-        style={{
-          maxWidth: 300,
-          width: "100%",
-          backgroundColor: "#fff",
-          color: "#333",
-          borderBottomWidth: 1,
-          borderBottomColor: "#999",
-          marginBottom: 20
-        }}  
-      />
+        <TextInput 
+          value={editTodoInput} 
+          onChangeText={(edit: string) => setEditTodoInput(edit)}
+          autoFocus={true}
+          style={{
+            maxWidth: 300,
+            width: "100%",
+            backgroundColor: "#fff",
+            color: "#333",
+            borderBottomWidth: 1,
+            borderBottomColor: "#999",
+            marginBottom: 20
+          }}  
+        />
 
-      <TouchableOpacity onPress={editTodo} style={[buttons.global, buttons.md]}>
-        <View>
-          <Text>EDIT</Text>
-        </View>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={editTodo} style={[buttons.global, buttons.md]}>
+          <View>
+            <Text>EDIT</Text>
+          </View>
+        </TouchableOpacity>
 
-      <Icon onPress={props.closeModal} name="close" size={30} color="#333" style={{
-        position: "absolute",
-        top: 5,
-        right: 5
-      }}/>
+        <Icon onPress={props.closeModal} name="close" size={30} color="#333" style={{
+          position: "absolute",
+          top: 5,
+          right: 5
+        }}/>
     </View>
   )
 }

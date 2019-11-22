@@ -25,20 +25,19 @@ Simple Todo App made in React Native.
   - [x] Update the bookmarked item if the item itself was edited
   - [x] Toggle completed mode for bookmarked item as well
   - [x] Display bookmarked items and filter all items on main page when searched
------------------------------------------
 - [x] Styling
-- [ ] Editing todo performance issue
 - [x] Reload list on main page after item is bookmarked or new list is created/updated
-- [ ] Reload main page lists after list is deleted
 - [x] Pull to reload:
   - [x] Main page
   - [x] Specific list 
 - [x] Animations
 - [x] Checkmark for completed todos styling / animation
-- [ ] Custom splash screen - native code
-- [ ] Custom icon - native code
 - [x] Page transitions
 - [x] Sort completed todos in a list to show on top
 - [x] Hide Completed/Not Completed text when filtering todos trough the search bar and display message if nothing has been found
+- [x] Editing todo issue double tap and issue(?) performance
 -----------------------------------------
+- [ ] Reload main page lists after list is deleted
+- [ ] Custom splash screen - native code
+- [ ] Custom icon - native code
 

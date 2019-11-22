@@ -215,6 +215,8 @@ const TodoItemsList = (props: TodoItemsListProps) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={!isEditing} // Take opposite value since isEditing is false by default
     >
       {isEditing ? 
         <View style={{
@@ -318,7 +320,7 @@ const TodoItemsList = (props: TodoItemsListProps) => {
             right: 0,
             bottom: 0,
             height: "100%",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             alignItems: "center",
           }}>
             <EditTodoModal 
