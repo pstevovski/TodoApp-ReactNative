@@ -1,18 +1,16 @@
-todosList: [
-  {
-    title: "",
-    id: "",
-    description: "",
-    dateCreated: "",
-    children: [
-      {
-        todo: "",
-        todoId: "",
-        date: "",
-        ?todoImage: "",
-        ?todoUser: "",
-        completed: boolean
-      }
-    ]
-  }
-]
+testList = [{
+  listName: "",
+  listDescription: ""
+  listID: "",
+  date: "",
+  completed: "",
+  todos: [
+    {
+      todo: "",
+      todoID: "",
+      date: "",
+      completed: "",
+      bookmarked: ""
+    }
+  ]
+}]

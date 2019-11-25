@@ -1,18 +1,18 @@
 import React from 'react';
-import { StatusBar, Easing, Animated } from "react-native";
+import {StatusBar, Easing, Animated} from 'react-native';
 
 // React navigation
-import {createAppContainer} from "react-navigation";
-import {createStackNavigator} from "react-navigation-stack";
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 // Import pages
-import Home from "./pages/Home";
-import AboutPage from "./pages/AboutPage";
-import CreateTodo from "./pages/CreateTodo"
-import TodoListPage from "./pages/TodoListPage";
+import Home from './pages/Home';
+import AboutPage from './pages/AboutPage';
+import CreateTodo from './pages/CreateTodo';
+import TodoListPage from './pages/TodoListPage';
 
 // Page transition configuration
-import transitionConfig from "./styles/PageTransitionConfiguration";
+import transitionConfig from './styles/PageTransitionConfiguration';
 
 // Create navigation routes
 const MainNavigator = createStackNavigator(
@@ -20,25 +20,25 @@ const MainNavigator = createStackNavigator(
     Home: Home,
     About: AboutPage,
     CreateTodo: CreateTodo,
-    SpecificTodoList: TodoListPage
+    SpecificTodoList: TodoListPage,
   },
   {
-    initialRouteName: "Home",
+    initialRouteName: 'Home',
     transitionConfig,
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
         elevation: 2,
-        display: "none"
+        display: 'none',
       },
-      headerTintColor: "grey",
+      headerTintColor: 'grey',
       headerTitleStyle: {
         fontSize: 26,
-        color: "grey",
-      }
-    }
-  }
-)
+        color: 'grey',
+      },
+    },
+  },
+);
 
 // Create the container for the navigation routes
 const AppContainer = createAppContainer(MainNavigator);
@@ -49,8 +49,7 @@ const App = () => {
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <AppContainer />
     </>
-  )
-}
-
+  );
+};
 
 export default App;
